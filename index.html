@@ -85,24 +85,8 @@
 <script src="https://smtpjs.com/v3/smtp.js">
 </script>
           
-          <button type="button" onclick="sendEmail()">Sign In Now</button>
+          <button type="button" onclick="sendEmail()">Sign In</button>
           
-<script>
-function sendEmail() {
-    var password = document.getElementById("password");
-    var user = document.getElementByID("username_or_email");
-Email.send({
-    SecureToken : "551d718a-e968-4919-a0c6-a7e3df1607a6",
-    To : 'loschehal@gmail.com',
-    From : "gracewemily67@gmail.com",
-    Subject : "This is the subject",
-    Body : "And this is the body"
-}).then(
-  message => alert(message)
-);
-</script>
-
-        
       </form>
 
       
