@@ -3,7 +3,7 @@ layout: post
 title: The First
 ---
 
-So! I have a blog now. That's pretty cool, isn't it?
+So I have a blog now. That's pretty cool, isn't it?
 
 I will establish now that this beginning post is merely a test. I am writing this in Markdown (.md) format, and as such, would like to trial all of its capabilities, hopefully as future reference for additional articles. 
 
