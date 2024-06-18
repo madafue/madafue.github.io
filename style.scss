@@ -130,6 +130,49 @@ img {
   background: $lightGray;
 }
 
+/* Define dark mode variables */
+$dark-background: #121212;
+$dark-font-color: #e0e0e0;
+$dark-link-color: #bb86fc;
+$dark-border-color: #333;
+
+/* Dark mode styles */
+body.dark-mode {
+  background: $dark-background;
+  color: $dark-font-color;
+}
+
+body.dark-mode a {
+  color: $dark-link-color;
+}
+
+body.dark-mode .container {
+  background: $dark-background;
+  color: $dark-font-color;
+}
+
+body.dark-mode h1, 
+body.dark-mode h2, 
+body.dark-mode h3, 
+body.dark-mode h4, 
+body.dark-mode h5, 
+body.dark-mode h6 {
+  color: $dark-font-color;
+}
+
+body.dark-mode .masthead {
+  border-bottom: 1px solid $dark-border-color;
+}
+
+body.dark-mode .post blockquote {
+  border-left: 2px solid $dark-border-color;
+  color: $dark-font-color;
+}
+
+body.dark-mode .wrapper-footer {
+  background-color: $dark-border-color;
+}
+
 // Nicolas Gallagher's micro clearfix hack
 // http://nicolasgallagher.com/micro-clearfix-hack/
 .clearfix:before,
