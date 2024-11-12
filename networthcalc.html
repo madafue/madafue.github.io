@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Net Worth Calculator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1e1e2f;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #2c2c3a;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            max-width: 600px;
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+            color: #ffffff;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #a0a0b0;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background-color: #1a1a28;
+            color: #e0e0e0;
+            outline: none;
+        }
+        input:focus {
+            border-color: #4caf50;
+        }
+        button {
+            background-color: #4caf50;
+            color: #ffffff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a045;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #90ee90;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Minecraft Net Worth Calculator</h1>
+        <div class="form-group">
+            <label for="commonItems">Number of Common Items</label>
+            <input type="number" id="commonItems" placeholder="Enter the number of common items">
+        </div>
+        <div class="form-group">
+            <label for="rareItems">Number of Rare Items</label>
+            <input type="number" id="rareItems" placeholder="Enter the number of rare items">
+        </div>
+        <div class="form-group">
+            <label for="uniqueItems">Number of Unique Items</label>
+            <input type="number" id="uniqueItems" placeholder="Enter the number of unique items">
+        </div>
+        <div class="form-group">
+            <label for="propertySize">Property Size (in square meters)</label>
+            <input type="number" id="propertySize" placeholder="Enter the property size">
+        </div>
+        <div class="form-group">
+            <label for="houseSize">House Size (in square meters)</label>
+            <input type="number" id="houseSize" placeholder="Enter the house size">
+        </div>
+        <div class="form-group">
+            <label for="houseQuality">House Quality (1 to 5)</label>
+            <input type="number" id="houseQuality" min="1" max="5" placeholder="Enter the house quality">
+        </div>
+        <div class="form-group">
+            <label for="numBuildings">Number of Buildings</label>
+            <input type="number" id="numBuildings" placeholder="Enter the number of buildings">
+        </div>
+        <div class="form-group">
+            <label for="bankBalance">Bank Balance ($)</label>
+            <input type="number" id="bankBalance" placeholder="Enter the bank balance">
+        </div>
+        <button onclick="calculateNetWorth()">Calculate Net Worth</button>
+        <div class="result" id="netWorthResult">Total Net Worth: $0.00</div>
+    </div>
+
+    <script>
+        function calculateNetWorth() {
+            // Get input values
+            const commonItems = parseInt(document.getElementById('commonItems').value) || 0;
+            const rareItems = parseInt(document.getElementById('rareItems').value) || 0;
+            const uniqueItems = parseInt(document.getElementById('uniqueItems').value) || 0;
+            const propertySize = parseFloat(document.getElementById('propertySize').value) || 0;
+            const houseSize = parseFloat(document.getElementById('houseSize').value) || 0;
+            const houseQuality = parseInt(document.getElementById('houseQuality').value) || 1;
+            const numBuildings = parseInt(document.getElementById('numBuildings').value) || 0;
+            const bankBalance = parseFloat(document.getElementById('bankBalance').value) || 0;
+
+            // Calculate net worth
+            const netWorth = (commonItems * 2) + (rareItems * 8) + (uniqueItems * 15) +
+                             (propertySize * 20) + (houseSize * 30 * houseQuality) +
+                             (numBuildings * 2000) + bankBalance;
+
+            // Display result
+            document.getElementById('netWorthResult').innerText = "Total Net Worth: $" + netWorth.toFixed(2);
+        }
+    </script>
+</body>
+</html>
