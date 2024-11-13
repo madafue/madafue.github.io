@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible=IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minecraft Net Worth Calculator</title>
+    <title>Minecraft Net Worth App</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -12,10 +12,20 @@
             color: #e0e0e0;
             margin: 0;
             padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+        }
+        nav {
+            background-color: #333;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            color: #ffffff;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        nav a:hover {
+            color: #90ee90;
         }
         .container {
             background-color: #2c2c3a;
@@ -23,7 +33,7 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
             padding: 20px;
             max-width: 600px;
-            width: 100%;
+            margin: 20px auto;
         }
         h1 {
             text-align: center;
@@ -38,27 +48,22 @@
             margin-bottom: 5px;
             color: #a0a0b0;
         }
-        input {
+        input, button {
             width: 100%;
             padding: 10px;
             border: 1px solid #444;
             border-radius: 4px;
             background-color: #1a1a28;
             color: #e0e0e0;
-            outline: none;
+            margin-bottom: 10px;
         }
-        input:focus {
+        input:focus, button:focus {
             border-color: #4caf50;
         }
         button {
             background-color: #4caf50;
-            color: #ffffff;
             border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
             cursor: pointer;
-            width: 100%;
-            font-size: 16px;
             transition: background-color 0.3s;
         }
         button:hover {
@@ -70,10 +75,30 @@
             color: #90ee90;
             text-align: center;
         }
+        .hidden {
+            display: none;
+        }
+        .entry-list {
+            margin-top: 20px;
+        }
+        .entry-item {
+            background-color: #1e1e2f;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            color: #e0e0e0;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <nav>
+        <a href="#" onclick="showCalculator()">Net Worth Calculator</a>
+        <a href="#" onclick="showEntryForm()">User Entry Form</a>
+        <a href="#" onclick="showEntriesPage()">View Entries</a>
+    </nav>
+
+    <!-- Net Worth Calculator -->
+    <div id="calculator" class="container">
         <h1>Minecraft Net Worth Calculator</h1>
         <div class="form-group">
             <label for="commonItems">Number of Common Items</label>
@@ -111,9 +136,65 @@
         <div class="result" id="netWorthResult">Total Net Worth: $0.00</div>
     </div>
 
+    <!-- User Entry Form -->
+    <div id="entryForm" class="container hidden">
+        <h1>Net Worth Entry Form</h1>
+        <div class="form-group">
+            <label for="dataEnterer">Enterer's Name</label>
+            <input type="text" id="dataEnterer" placeholder="Enter your name">
+        </div>
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Enter the player's username">
+        </div>
+        <div class="form-group">
+            <label for="netWorth">Net Worth ($)</label>
+            <input type="number" id="netWorth" placeholder="Enter the net worth">
+        </div>
+        <div class="form-group">
+            <label for="entryDate">Date Entered</label>
+            <input type="date" id="entryDate">
+        </div>
+        <div class="form-group">
+            <label for="nextCheckDate">Next Check Date</label>
+            <input type="date" id="nextCheckDate">
+        </div>
+        <button onclick="addNetWorthEntry()">Add Entry</button>
+        <div class="result hidden" id="entryResult">Entry added successfully!</div>
+    </div>
+
+    <!-- Entries Page -->
+    <div id="entriesPage" class="container hidden">
+        <h1>View All Entries</h1>
+        <div id="entriesList" class="entry-list">
+            <!-- Entries will be dynamically added here -->
+        </div>
+    </div>
+
     <script>
+        let entries = [];
+
+        function showCalculator() {
+            document.getElementById('calculator').classList.remove('hidden');
+            document.getElementById('entryForm').classList.add('hidden');
+            document.getElementById('entriesPage').classList.add('hidden');
+        }
+
+        function showEntryForm() {
+            document.getElementById('entryForm').classList.remove('hidden');
+            document.getElementById('calculator').classList.add('hidden');
+            document.getElementById('entriesPage').classList.add('hidden');
+            document.getElementById('entryResult').classList.add('hidden');
+        }
+
+        function showEntriesPage() {
+            document.getElementById('entriesPage').classList.remove('hidden');
+            document.getElementById('calculator').classList.add('hidden');
+            document.getElementById('entryForm').classList.add('hidden');
+            displayEntries();
+        }
+
         function calculateNetWorth() {
-            // Get input values
             const commonItems = parseInt(document.getElementById('commonItems').value) || 0;
             const rareItems = parseInt(document.getElementById('rareItems').value) || 0;
             const uniqueItems = parseInt(document.getElementById('uniqueItems').value) || 0;
@@ -123,13 +204,64 @@
             const numBuildings = parseInt(document.getElementById('numBuildings').value) || 0;
             const bankBalance = parseFloat(document.getElementById('bankBalance').value) || 0;
 
-            // Calculate net worth
-            const netWorth = (commonItems * 2) + (rareItems * 8) + (uniqueItems * 15) +
-                             (propertySize * 20) + (houseSize * 30 * houseQuality) +
+            const netWorth = (commonItems * 100) + (rareItems * 500) + (uniqueItems * 1000) +
+                             (propertySize * 50) + (houseSize * 50 * houseQuality) +
                              (numBuildings * 2000) + bankBalance;
 
-            // Display result
             document.getElementById('netWorthResult').innerText = "Total Net Worth: $" + netWorth.toFixed(2);
+        }
+
+        function addNetWorthEntry() {
+            const dataEnterer = document.getElementById('dataEnterer').value;
+            const username = document.getElementById('username').value;
+            const netWorth = parseFloat(document.getElementById('netWorth').value) || 0;
+            const entryDate = document.getElementById('entryDate').value;
+            const nextCheckDate = document.getElementById('nextCheckDate').value;
+
+            if (!dataEnterer || !username || !entryDate || !nextCheckDate) {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            const entry = {
+                dataEnterer,
+                username,
+                netWorth,
+                entryDate,
+                nextCheckDate
+            };
+
+            entries.push(entry);
+            localStorage.setItem('netWorthEntries', JSON.stringify(entries));
+
+            document.getElementById('entryResult').innerText = 
+                `Entry for ${username} added successfully by ${dataEnterer}!`;
+            document.getElementById('entryResult').classList.remove('hidden');
+        }
+
+        function displayEntries() {
+            const savedEntries = JSON.parse(localStorage.getItem('netWorthEntries')) || [];
+            entries = savedEntries;
+            const entriesList = document.getElementById('entriesList');
+            entriesList.innerHTML = '';
+
+            entries.forEach(entry => {
+                const entryDiv = document.createElement('div');
+                entryDiv.classList.add('entry-item');
+                entryDiv.innerHTML = `
+                    <strong>Entered by:</strong> ${entry.dataEnterer}<br>
+                    <strong>Username:</strong> ${entry.username}<br>
+                    <strong>Net Worth:</strong> $${entry.netWorth.toFixed(2)}<br>
+                    <strong>Date Entered:</strong> ${entry.entryDate}<br>
+                    <strong>Next Check Date:</strong> ${entry.nextCheckDate}
+                `;
+                entriesList.appendChild(entryDiv);
+            });
+        }
+
+        // Load entries on page load
+        window.onload = function() {
+            displayEntries();
         }
     </script>
 </body>
