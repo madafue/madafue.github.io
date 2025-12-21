@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trophy Case | Madafue</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+    <div id="site-wrapper">
+    
+        <header class="site-header">
+            <h1>The Trophy Case</h1>
+        </header>
+
+        <nav class="site-nav">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/trophy-case/" class="current">Trophy Case</a></li>
+                <li><a href="/library/">Library</a></li>
+            </ul>
+        </nav>
+
+        <main class="site-content">
+            
+            <section class="ra-player-card">
+                <div class="player-avatar-container">
+                    <img id="ra-avatar" src="../images/xp-frog.jpg" alt="User Avatar">
+                </div>
+                
+                <div class="player-info">
+                    <h2 id="ra-username">Loading User...</h2>
+                    <div class="player-stats">
+                        <div class="stat-box">
+                            <span class="label">Points</span>
+                            <span class="value" id="ra-points">0</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="label">Rank</span>
+                            <span class="value" id="ra-rank">0</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="label">Masteries</span>
+                            <span class="value" id="ra-mastery-count">0</span>
+                        </div>
+                    </div>
+                    <p class="last-played">Last Seen: <span id="ra-last-game">...</span></p>
+                </div>
+            </section>
+
+            <section class="mastery-section">
+                <h2>Wall of Masteries</h2>
+                <p class="section-desc">A complete catalog of games I have 100% completed.</p>
+                
+                <div class="trophy-controls">
+                    <label for="sort-select">Sort By:</label>
+                    <select id="sort-select">
+                        <option value="default">Recently Mastered (Default)</option>
+                        <option value="oldest">Oldest Mastered</option>
+                        <option value="alpha">Series (A-Z)</option>
+                        <option value="priority">My Favorites First</option>
+                    </select>
+                </div>
+                <div id="ra-game-grid" class="game-grid">
+                    </div>
+            </section>
+
+        </main>
+
+        <footer class="site-footer">
+            <p>&copy; 2025 Adam Mawji. Powered by RetroAchievements API.</p>
+            </footer>
+        
+    </div> 
+
+    <script src="trophy.js"></script>
+</body>
+</html>

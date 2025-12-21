@@ -3,10 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website</title>
+    <title>madafue's Website</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Hello, World!</h1>
-    <p>This is a website.</p>
-</body>
+
+    <div id="login-screen">
+    
+    <div class="welcome-area">
+    <h1 class="welcome-title">
+        <img src="images/xp-logo.png" alt="" class="xp-logo">
+        <b><i>welcome</i></b>
+    </h1>
+    <h3>To begin, click your user name.</h3>
+</div>
+
+    <div class="users-area">
+        <ul class="user-list">
+            <li>
+                <button class="user-profile-button" data-profile="recruiter">
+                    <img src="images/xp-chess.jpg" alt="" class="user-icon icon-recruiter">
+                    <span>Recruiter</span>
+                </button>
+            </li>
+            <li>
+                <button class="user-profile-button" data-profile="developer">
+                    <img src="images/xp-robot.jpg" alt="" class="user-icon icon-developer">
+                    <span>Developer</span>
+                </button>
+            </li>
+            <li>
+                <button class="user-profile-button" data-profile="adventurer">
+                    <img src="images/xp-frog.jpg" alt="" class="user-icon icon-adventurer">
+                    <span>Adventurer</span>
+                </button>
+            </li>
+        </ul>
+    </div>
+
+    <div class="taskbar-area">
+    <button id="turn-off-button">
+        <img src="images/power-icon.png" alt="" class="power-icon">
+        Turn off computer
+    </button>
+</div>
+
+
+<!-- Actual Page Info -->
+
+
+</div>
+
+    <div id="site-wrapper" class="hidden">
+    
+        <header class="site-header">
+            <h1>Madafue's Exhibit</h1>
+        </header>
+
+        <nav class="site-nav">
+            <ul>
+                <li><a href="/" class="current">Home</a></li>
+                <li><a href="/trophy-case/">Trophy Case</a></li>
+                <li><a href="/library/">Library</a></li>
+            </ul>
+        </nav>
+
+        <main class="site-content">
+
+            <section class="featured-exhibit">
+                <div class="canvas-container">
+                    <canvas id="tsp-canvas"></canvas>
+                </div>
+                <div class="exhibit-info">
+                    <h2>The Perfect Route</h2>
+                    <p>
+                        A real-time visualization of the Traveling Salesman Problem.
+            In high school, I attempted to apply this algorithm to <b>Super Mario Odyssey</b> to calculate
+            the mathematically optimal route for collecting Power Moons.
+                    </p>
+                    <p style="margin-top: 0.5rem;">
+            <a href="/library/mario-tsp-paper.html">> Read the Paper</a>
+        </p>
+                </div>
+            </section>
+
+            <section class="whats-new">
+                <h2>What's New</h2>
+                <ul>
+                    <li><span class="date">(11.04)</span> New Essay: ""</li>
+                    <li><span class="date">(11.04)</span> New Mastery: ""</li>
+                    <li><span class="date">(11.03)</span> Site Launched!</li>
+                </ul>
+            </section>
+
+            <section class="mission">
+                <h2>About This Site</h2>
+                <p>
+                    This is a personal digital garden. It's built by hand.
+                </p>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <p>&copy; 2025 Adam Mawji. All pixels hand-crafted.</p>
+            <button id="logout-button">Log Out</button>
+        </footer>
+        
+        
+    </div> 
+
+    <div id="shutdown-screen"></div>
+    
+    <script src="script.js"></script>
+    <script src="tsp.js"></script>
+ </body>
 </html>
