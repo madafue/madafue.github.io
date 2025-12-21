@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Minecraft Math | Tools</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        :root {
+            --mc-bg: #1e1e1e; 
+            --mc-btn: #7d7d7d; 
+            --mc-btn-shadow: #3a3a3a;
+            --mc-text-shadow: 2px 2px 0 #000;
+        }
+
+        body {
+            background-color: #1e1e1e;
+            background-image: 
+                radial-gradient(circle, #2a2a2a 20%, transparent 20%),
+                radial-gradient(circle, #2a2a2a 20%, transparent 20%);
+            background-size: 32px 32px;
+            background-position: 0 0, 16px 16px;
+        }
+
+        .mc-container {
+            max-width: 800px;
+            margin: 0 auto;
+            border: 4px solid #fff; 
+            background: rgba(0,0,0,0.7);
+            padding: 2rem;
+            image-rendering: pixelated;
+        }
+
+        h1, h2, h3, label, button {
+            font-family: monospace; 
+            text-shadow: var(--mc-text-shadow);
+            color: #fff;
+        }
+
+        /* --- TABS SYSTEM --- */
+        .mc-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .mc-tab {
+            background: var(--mc-btn);
+            border: 2px solid #000;
+            border-top: 2px solid #aaa;
+            border-left: 2px solid #aaa;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .mc-tab.active {
+            background: #4a8f4a; /* green for active */
+            color: #ffff55;
+        }
+
+        /* --- TOOLS SECTIONS --- */
+        .tool-section {
+            display: none; 
+            background: #c6c6c6;
+            padding: 20px;
+            border: 4px solid #555;
+            color: #222; 
+        }
+        
+        .tool-section.active {
+            display: block;
+        }
+
+        .tool-section h2 {
+            color: #404040;
+            text-shadow: none;
+            margin-top: 0;
+            border-bottom: 2px solid #999;
+            padding-bottom: 10px;
+        }
+
+        /* --- INPUTS --- */
+        .mc-input-group {
+            margin-bottom: 1rem;
+        }
+        
+        .mc-input-group label {
+            display: block;
+            color: #333;
+            text-shadow: none;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .mc-input {
+            background: #000;
+            border: 2px solid #a0a0a0;
+            border-bottom: 2px solid #fff;
+            border-right: 2px solid #fff;
+            color: #fff;
+            padding: 8px;
+            font-family: inherit;
+            width: 100%;
+            max-width: 200px;
+        }
+
+        .mc-btn-action {
+            background: var(--mc-btn);
+            border: 2px solid #000;
+            border-top: 2px solid #ddd;
+            border-left: 2px solid #ddd;
+            padding: 10px 30px;
+            color: #fff;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .mc-btn-action:active {
+            border: 2px solid #000;
+            border-bottom: 2px solid #ddd;
+            border-right: 2px solid #ddd;
+            background: #555;
+        }
+
+        .mc-result {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #222;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="site-wrapper">
+        <header class="site-header"><h1>Minecraft Math</h1></header>
+
+        <nav class="site-nav">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/trophy-case/">Trophy Case</a></li>
+                <li><a href="/tools/" class="current">Tools</a></li>
+                <li><a href="/library/">Library</a></li>
+            </ul>
+        </nav>
+
+        <main class="site-content">
+            <div class="mc-container">
+                
+                <div class="mc-tabs">
+                    <button class="mc-tab active" onclick="openTool('coords')">Portal Coords</button>
+                    <button class="mc-tab" onclick="openTool('stacks')">Stack Calc</button>
+                    <button class="mc-tab" onclick="openTool('uuid')">UUID/Skin</button>
+                    <button class="mc-tab" onclick="openTool('distance')">Distance</button>
+                </div>
+
+                <div id="coords" class="tool-section active">
+                    <h2>Nether Coordinator</h2>
+                    <p>Enter coordinates to convert.</p>
+                    
+                    <div style="display:flex; gap:20px; flex-wrap:wrap;">
+                        <div class="mc-input-group">
+                            <label>X Coordinate</label>
+                            <input type="number" id="cX" class="mc-input" placeholder="0">
+                        </div>
+                        <div class="mc-input-group">
+                            <label>Z Coordinate</label>
+                            <input type="number" id="cZ" class="mc-input" placeholder="0">
+                        </div>
+                    </div>
+
+                    <button class="mc-btn-action" onclick="calcToNether()">Overworld -> Nether</button>
+                    <button class="mc-btn-action" onclick="calcToOverworld()">Nether -> Overworld</button>
+
+                    <div class="mc-result" id="coordResult">Result: ...</div>
+                </div>
+
+                <div id="stacks" class="tool-section">
+                    <h2>Stack Counter</h2>
+                    <p>Calculate Shulker Boxes and Stacks.</p>
+
+                    <div class="mc-input-group">
+                        <label>Total Items</label>
+                        <input type="number" id="totalItems" class="mc-input" placeholder="e.g. 2000">
+                    </div>
+
+                    <div class="mc-input-group">
+                        <label>Stack Size</label>
+                        <select id="stackSize" class="mc-input">
+                            <option value="64">64 (Standard)</option>
+                            <option value="16">16 (Snowballs/Buckets)</option>
+                            <option value="1">1 (Tools/Potions)</option>
+                        </select>
+                    </div>
+
+                    <button class="mc-btn-action" onclick="calcStacks()">Calculate Storage</button>
+
+                    <div class="mc-result" id="stackResult" style="white-space: pre-line;">Result: ...</div>
+                </div>
+
+                <div id="uuid" class="tool-section">
+                    <h2>Player Info</h2>
+                    <p>Get UUID and Skin from Username.</p>
+
+                    <div class="mc-input-group">
+                        <label>Minecraft Username</label>
+                        <input type="text" id="mcUsername" class="mc-input" placeholder="Notch">
+                    </div>
+
+                    <button class="mc-btn-action" onclick="lookupPlayer()">Lookup Player</button>
+
+                    <div id="playerResult" style="display:none; margin-top:20px; text-align:center;">
+                        <img id="skinPreview" src="" style="width:128px; image-rendering:pixelated;">
+                        <div class="mc-result" id="uuidOutput" style="font-size: 0.9rem; margin-top:10px; word-break: break-all;">...</div>
+                        
+                        <a id="skinDownload" href="#" download class="mc-btn-action" style="display:inline-block; margin-top:10px; text-decoration:none; color:white;">Download Skin</a>
+                    </div>
+                </div>
+
+                <div id="distance" class="tool-section">
+                    <h2>Travel Calculator</h2>
+                    <p>Calculate blocks between two points.</p>
+
+                    <div style="display:flex; gap:2rem; flex-wrap:wrap; margin-bottom:1rem;">
+                        <div style="flex:1;">
+                            <h3 style="margin-top:0; color:#aaa;">Point A</h3>
+                            <div class="mc-input-group">
+                                <label>X</label> <input type="number" id="ax" class="mc-input" value="0">
+                            </div>
+                            <div class="mc-input-group">
+                                <label>Y</label> <input type="number" id="ay" class="mc-input" value="64">
+                            </div>
+                            <div class="mc-input-group">
+                                <label>Z</label> <input type="number" id="az" class="mc-input" value="0">
+                            </div>
+                        </div>
+
+                        <div style="flex:1;">
+                            <h3 style="margin-top:0; color:#aaa;">Point B</h3>
+                            <div class="mc-input-group">
+                                <label>X</label> <input type="number" id="bx" class="mc-input" value="100">
+                            </div>
+                            <div class="mc-input-group">
+                                <label>Y</label> <input type="number" id="by" class="mc-input" value="64">
+                            </div>
+                            <div class="mc-input-group">
+                                <label>Z</label> <input type="number" id="bz" class="mc-input" value="100">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="mc-btn-action" onclick="calcDistance()">Measure Distance</button>
+
+                    <div id="distResult" class="mc-result" style="white-space: pre-line;">...</div>
+                </div>
+
+            </div>
+        </main>
+    </div> 
+
+    <script>
+        // --- TAB LOGIC ---
+        function openTool(toolId) {
+            document.querySelectorAll('.tool-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.mc-tab').forEach(el => el.classList.remove('active'));
+            document.getElementById(toolId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // --- TOOL 1: COORDS ---
+        function calcToNether() {
+            const x = parseFloat(document.getElementById('cX').value) || 0;
+            const z = parseFloat(document.getElementById('cZ').value) || 0;
+            const nx = Math.floor(x / 8);
+            const nz = Math.floor(z / 8);
+            document.getElementById('coordResult').innerText = `Nether: X: ${nx} / Z: ${nz}`;
+        }
+
+        function calcToOverworld() {
+            const x = parseFloat(document.getElementById('cX').value) || 0;
+            const z = parseFloat(document.getElementById('cZ').value) || 0;
+            const ox = x * 8;
+            const oz = z * 8;
+            document.getElementById('coordResult').innerText = `Overworld: X: ${ox} / Z: ${oz}`;
+        }
+
+        // --- TOOL 2: STACKS ---
+        function calcStacks() {
+            const total = parseInt(document.getElementById('totalItems').value) || 0;
+            const stackSize = parseInt(document.getElementById('stackSize').value);
+            
+            if (stackSize === 1) {
+                document.getElementById('stackResult').innerText = `That's just ${total} unstackable items.`;
+                return;
+            }
+
+            const itemsPerShulker = stackSize * 27; // 27 slots per shulker
+
+            const shulkers = Math.floor(total / itemsPerShulker);
+            let remainder = total % itemsPerShulker;
+
+            const stacks = Math.floor(remainder / stackSize);
+            const leftOverItems = remainder % stackSize;
+
+            let output = "";
+            if (shulkers > 0) output += `📦 ${shulkers} Shulker Boxes\n`;
+            if (stacks > 0)   output += `📚 ${stacks} Stacks\n`;
+            if (leftOverItems > 0) output += `🔹 ${leftOverItems} Items`;
+
+            if (output === "") output = "0 Items";
+
+            document.getElementById('stackResult').innerText = output;
+        }
+
+        // --- TOOL 3: UUID & SKIN ---
+        async function lookupPlayer() {
+            const username = document.getElementById('mcUsername').value.trim();
+            if (!username) return;
+
+            const resultDiv = document.getElementById('playerResult');
+            const uuidOutput = document.getElementById('uuidOutput');
+            const skinImg = document.getElementById('skinPreview');
+            const downloadBtn = document.getElementById('skinDownload');
+
+            uuidOutput.innerHTML = "Scanning the mainframe...";
+            resultDiv.style.display = 'block';
+
+            try {
+                const response = await fetch(`https://api.ashcon.app/mojang/v2/user/${username}`);
+                if (!response.ok) throw new Error("Player not found");
+                const data = await response.json();
+
+                const fullUUID = data.uuid;
+                const trimmedUUID = fullUUID.replace(/-/g, ''); // remove all dashes
+
+                uuidOutput.innerHTML = `
+                    <div style="margin-bottom:5px;">UUID: <span style="color:#ffff55">${fullUUID}</span></div>
+                    <div style="font-size:0.8em; color:#005288;">Trimmed: ${trimmedUUID}</div>
+                `;
+
+                skinImg.src = `https://mc-heads.net/body/${fullUUID}/128`;
+
+                downloadBtn.href = `https://minotar.net/skin/${fullUUID}`;
+                downloadBtn.style.display = 'inline-block';
+
+            } catch (error) {
+                console.error(error);
+                uuidOutput.innerText = "Error: Player not found.";
+                skinImg.src = "";
+                downloadBtn.style.display = 'none';
+            }
+        }
+
+        // --- TOOL 4: DISTANCE ---
+        function calcDistance() {
+            // default to 0 if empty
+            const ax = parseFloat(document.getElementById('ax').value) || 0;
+            const ay = parseFloat(document.getElementById('ay').value) || 0;
+            const az = parseFloat(document.getElementById('az').value) || 0;
+
+            const bx = parseFloat(document.getElementById('bx').value) || 0;
+            const by = parseFloat(document.getElementById('by').value) || 0;
+            const bz = parseFloat(document.getElementById('bz').value) || 0;
+
+            // Math time
+            const dx = ax - bx;
+            const dy = ay - by;
+            const dz = az - bz;
+
+            // 3D Distance (Hypotenuse of all 3)
+            const dist3d = Math.sqrt(dx*dx + dy*dy + dz*dz);
+            
+            // 2D Distance (Ignoring Y height)
+            const dist2d = Math.sqrt(dx*dx + dz*dz);
+
+            document.getElementById('distResult').innerHTML = `
+                Straight Line (Elytra): <span style="color:#ffff55">${dist3d.toFixed(1)} blocks</span>
+                Flat (Walking): <span style="color:#005288">${dist2d.toFixed(1)} blocks</span>
+            `;
+        }
+    </script>
+</body>
+</html>

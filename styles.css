@@ -545,3 +545,61 @@ body.shut-down #shutdown-screen {
 #sort-select:focus {
     border-color: var(--color-accent);
 }
+
+/* ======== TOOLS/CONTROL PANEL LAYOUT ======== */
+
+.tool-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.tool-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    background-color: #222; 
+    text-decoration: none; 
+    
+    border: 4px solid var(--color-border);
+    box-shadow: inset 0 0 0 2px var(--color-border-inner);
+    
+    transition: transform 0.1s ease, border-color 0.1s ease;
+}
+
+.tool-card:hover {
+    transform: translateY(-3px); 
+    border-color: var(--color-accent); 
+    background-color: #2a2a2a; 
+}
+
+.tool-icon {
+    width: 64px;
+    height: 64px;
+    object-fit: contain; 
+    
+    image-rendering: pixelated; 
+}
+
+/*Text Info */
+.tool-info h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.1rem;
+    color: #fff;
+}
+
+.tool-info p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #aaa;
+    font-family: var(--font-body);
+}
+
+/* Coming Soon State */
+.tool-card.coming-soon {
+    opacity: 0.6;
+    cursor: not-allowed;
+    filter: grayscale(100%); 
+}
