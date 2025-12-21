@@ -18,7 +18,7 @@ window.startTSP = function() {
     let currentCityIndex = 0;
     let width, height;
 
-    // Helper to stop any running loop
+    // stop any running loops
     function stop() {
         clearTimeout(tspTimeout);
     }
@@ -68,16 +68,13 @@ window.startTSP = function() {
     }
 
     function draw() {
-        // 1. Clear screen (Keep black for retro feel)
         ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, width, height);
 
-        // 2. Draw Paths (The Odyssey's Flight Path)
         if (visited.length > 1) {
             ctx.beginPath();
-            // Change color to a "Mario Red" or keep your "Terminal Green"
-            // ctx.strokeStyle = '#E60012'; // Mario Red
-            ctx.strokeStyle = '#00ff7f'; // Your Retro Green (Recommended for consistency)
+            // ctx.strokeStyle = '#E60012'; // Mario Red allegedly
+            ctx.strokeStyle = '#00ff7f';
             ctx.lineWidth = 2;
             
             const start = cities[visited[0]];
@@ -90,22 +87,18 @@ window.startTSP = function() {
             ctx.stroke();
         }
 
-        // 3. Draw Cities (The Power Moons)
         for (let i = 0; i < cities.length; i++) {
             const city = cities[i];
             
-            // Logic: Visited moons turn dull, unvisited are bright Gold
             const moonColor = city.visited ? '#555' : '#FFD700'; // Gold
-            const moonSize = 3; // Slightly bigger than before
+            const moonSize = 3;
 
             ctx.beginPath();
             ctx.fillStyle = moonColor;
             
-            // Draw the Moon (Circle)
             ctx.arc(city.x, city.y, moonSize, 0, Math.PI * 2);
             ctx.fill();
 
-            // Optional: Add a little shine/border to make it pop
             if (!city.visited) {
                 ctx.strokeStyle = '#FFF';
                 ctx.lineWidth = 1;
@@ -125,7 +118,6 @@ window.startTSP = function() {
             currentCityIndex = nextIndex;
             tspTimeout = setTimeout(step, connectSpeed);
         } else {
-            // Close the loop visually
             ctx.beginPath();
             ctx.strokeStyle = pathColor;
             ctx.moveTo(cities[currentCityIndex].x, cities[currentCityIndex].y);
@@ -137,9 +129,8 @@ window.startTSP = function() {
     }
 
     function reset() {
-        // --- THE FIX IS HERE ---
-        stop(); // Kill any existing "salesmen" before creating a new one!
-        // -----------------------
+     
+        stop(); 
         
         initCities();
         visited = [];

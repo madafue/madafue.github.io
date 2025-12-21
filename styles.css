@@ -2,11 +2,11 @@
 
 :root {
     --font-pixel: 'Press Start 2P', sans-serif;
-    --font-body: 'Arial', sans-serif; /* A fallback, clean font */
+    --font-body: 'Arial', sans-serif;
     
-    --color-bg: #1a1a1a;       /* Dark charcoal background */
-    --color-text: #e0e0e0;     /* Soft white text */
-    --color-accent: #00ff7f;   /* A retro "terminal green" */
+    --color-bg: #1a1a1a;       /* background */
+    --color-text: #e0e0e0;     /* text */
+    --color-accent: #00ff7f;   /* "terminal green" allegedly */
     --color-border: #555;
     --color-border-inner: #000;
 }
@@ -40,18 +40,15 @@ a {
     color: var(--color-accent); text-decoration: none; 
 }
 
-/* This is the NEW, CORRECT rule for 'body' */
 body {
     background-color: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-body);
     line-height: 1.6;
     
-    /* NO padding, grid, or layout styles here */
 }
 
 #site-wrapper {
-    /* These are the layout styles moved from 'body' */
     display: grid;
     grid-template-areas:
         "header"
@@ -62,7 +59,6 @@ body {
     max-width: 900px; 
     margin: 0 auto;
     
-    /* We add the padding here now */
     padding: 1rem;
 }
 
@@ -132,53 +128,44 @@ body {
     background-color: #000; /* Pitch black */
     z-index: 9999; /* On top of EVERYTHING */
     
-    /* Hidden by default */
+    /* hidden by default */
     opacity: 0;
-    pointer-events: none; /* Let clicks pass through when hidden */
+    pointer-events: none; /* let clicks pass through when hidden */
     
-    /* Smooth fade out effect (like a monitor turning off) */
+    /* Smooth fade out effect I hope */
     transition: opacity 1.5s ease-in-out;
 }
 
-/* The class we will add with JS */
 body.shut-down #shutdown-screen {
     opacity: 1;
-    pointer-events: all; /* Block clicks now */
+    pointer-events: all; 
 }
 
-/* A utility class to hide elements */
-/* We'll toggle this with JavaScript later */
 .hidden {
     display: none !important;
 }
 
 /* The main login screen container */
-/* ...REPLACE with this... */
 #login-screen {
     min-height: 100vh;
     font-family: var(--font-body);
     
-    /* Classic Windows XP blue wallpaper background */
+    /* windows XP blue background */
     background-color: #3d78d8;
     background-image: linear-gradient(to bottom, #2a5edc, #3d78d8);
 
-    /* --- 1. THE NEW GRID LAYOUT --- */
     display: grid;
-    /* Define our 3 zones */
     grid-template-areas:
         "welcome users"
         "taskbar taskbar";
-    /* Make the user list wider than the welcome text */
+    /* make the user list wider than the welcome text */
     grid-template-columns: 1fr 1.5fr;
-    /* Make the taskbar 80px tall */
     grid-template-rows: 400px 80px; 
     padding: 2rem;
 }
 
-/* --- 2. ASSIGN ZONES TO THE GRID --- */
 .welcome-area {
     grid-area: welcome;
-    /* Align content to the bottom-right of this zone */
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -189,37 +176,27 @@ body.shut-down #shutdown-screen {
 
 .users-area {
     grid-area: users;
-    /* Center the user list within this zone */
     display: flex;
     align-items: center;
-    /* --- ADD/ADJUST THESE LINES --- */
     
-    /* Pushes the list further RIGHT */
-    padding-left: 10rem;  /* Try 4rem, 6rem, etc. */
+    padding-left: 10rem;
     
-    /* Pushes the list DOWN from the vertical center */
-    padding-top: 10rem;   /* Try 3rem, 5rem, etc. */
+    padding-top: 10rem; 
 }
 
 .taskbar-area {
     grid-area: taskbar;
-    /* Add the dark blue semi-transparent bar */
     background: rgba(6, 32, 102, 0.8);
     border-top: 1px solid rgba(255, 255, 255, 0.5);
     
-    /* Position this rule at the very bottom of the screen */
-    /* We do this by overriding the grid layout for this one item */
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 80px; /* Matches grid-template-rows */
+    height: 80px;
 }
 
 
-/* --- 3. SMALL TWEAKS to old styles --- */
-
-/* The h3 is now in the .welcome-area */
 .welcome-area h3 {
     font-family: var(--font-body);
     font-weight: bold;
@@ -229,21 +206,18 @@ body.shut-down #shutdown-screen {
     margin: 0;
 }
 
-/* We'll add the h1 styling for later */
 .welcome-title {
-    font-size: 3rem; /* Just a placeholder */
+    font-size: 3rem; /* placeholder */
     color: white;
     margin: 0;
 }
 
-/* We'll style the button later */
 #turn-off-button {
-    display: none; /* Hide for now */
+    display: none; 
 }
 
-/* The "To begin..." text */
 .h3 {
-    font-family: var(--font-body); /* Override pixel font */
+    font-family: var(--font-body); 
     font-weight: bold;
     font-size: 1.5rem;
     color: #fff;
@@ -254,109 +228,90 @@ body.shut-down #shutdown-screen {
 .user-list {
     list-style: none;
     display: flex;
-    flex-direction: column; /* Stack them vertically */
-    gap: 0.5rem; /* A small gap between each bar */
-    width: 100%; /* Make the list fill the .users-area */
-    max-width: 350px; /* Stop it from getting too wide */
+    flex-direction: column;
+    gap: 0.5rem; 
+    width: 100%;
+    max-width: 350px;
 }
 
 .user-profile-button {
-    /* Reset button styles */
     background: none;
-    border: 3px solid transparent; /* Add a transparent border for the hover effect */
+    border: 3px solid transparent;
     cursor: pointer;
     
-    /* --- NEW LAYOUT --- */
     display: flex;
-    flex-direction: row; /* Icon and text side-by-side */
-    align-items: center; /* Vertically center them */
-    gap: 1rem; /* Space between icon and text */
+    flex-direction: row; 
+    align-items: center; 
+    gap: 1rem; 
     
-    /* --- NEW SIZING --- */
-    width: 100%; /* Make button fill the .user-list */
+    width: 100%; 
     padding: 0.5rem;
     
-    /* Text */
     color: #fff;
     font-size: 1.25rem;
     font-weight: bold;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
-    text-align: left; /* Align text to the left */
+    text-align: left;
     
     border-radius: 4px;
-    outline: none; /* We will style the focus/hover state */
+    outline: none; 
 }
 
-/* The placeholder icon box */
 .user-icon {
-    width: 50px; /* Make icon smaller */
-    height: 50px; /* Make icon smaller */
-    border: 2px solid #fff; /* Make border a bit thinner */
+    width: 50px; 
+    height: 50px; 
+    border: 2px solid #fff; 
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     border-radius: 4px;
     transition: transform 0.2s ease;
     
-    /* This stops the icon from shrinking */
     flex-shrink: 0; 
 }
 
 .user-profile-button:hover,
 .user-profile-button:focus {
 
-    /* --- 1. The Background Gradient (CHANGED) --- */
-    /* Now fades from a dark blue to transparent */
     background: linear-gradient(to right, 
-        rgba(6, 32, 102, 0.5),  /* Dark blue start */
-        rgba(6, 32, 102, 0.2),  /* Fades */
-        transparent             /* Ends transparent */
+        rgba(6, 32, 102, 0.5),  
+        rgba(6, 32, 102, 0.2),  
+        transparent            
     );
 
-    /* --- 2. The Gradient Border (CHANGED) --- */
     border-width: 2px;
     border-style: solid;
-    
-    /* Now uses a dark blue gradient */
+
     border-image-source: linear-gradient(to right, 
-        rgba(6, 32, 102, 0.9),  /* Strong dark blue */
-        rgba(6, 32, 102, 0.3),  /* Fades */
+        rgba(6, 32, 102, 0.9),  
+        rgba(6, 32, 102, 0.3),  
         transparent
     );
     
     border-image-slice: 1;
     border-right-width: 0;
     
-    /* --- 3. The Rounded Corners ---
-    border-radius: 8px;  */
 }
 
-/* --- 4. (Optional Cleanup) (CHANGED) --- */
-/* This updates the icon's border on hover to match */
 .user-profile-button:hover .user-icon,
 .user-profile-button:focus .user-icon {
     border-color: rgba(6, 32, 102, 0.5);
 }
 
 
-/* Placeholder colors for the icons */
-/* .icon-recruiter  { background-color: #d13c2c; } 
-.icon-developer  { background-color: #2c7ad1; } 
-.icon-adventurer { background-color: #4ad12c; }  */
 
 /* ======== LOG OUT BUTTON STYLE ======== */
 #logout-button {
-    font-family: var(--font-pixel); /* Use pixel font */
+    font-family: var(--font-pixel); /* pixel font */
     font-size: 0.8rem;
     color: var(--color-bg);
     background-color: var(--color-border);
     
     border: 2px solid var(--color-border);
-    border-radius: 0; /* Sharp corners */
+    border-radius: 0; 
     padding: 0.5rem 0.75rem;
     cursor: pointer;
     
-    /* Put it on its own line */
     display: block; 
-    margin: 1.5rem auto 0; /* Center it */
+    margin: 1.5rem auto 0; 
     
     transition: all 0.1s step-end;
 }
@@ -368,86 +323,68 @@ body.shut-down #shutdown-screen {
     box-shadow: 0 0 0 2px var(--color-accent);
 }
 
-/* ======== STEP 5: FINAL STYLING ======== */
+/* ======== STYLING ======== */
 
-/* --- 1. Global Font Change --- */
-/* The "Trebuchet MS" font is iconic to XP. 
-   Let's add it to our root variables. */
 :root {
     --font-xp: 'Trebuchet MS', 'Arial', sans-serif;
 }
-/* Now, let's make the login screen use it */
 #login-screen {
-    /* ... (existing styles) ... */
-    font-family: var(--font-xp); /* <-- ADD THIS LINE */
+    font-family: var(--font-xp); 
 }
-/* And update the h3 to use it */
 .welcome-area h3 {
-    /* ... (existing styles) ... */
-    font-family: var(--font-xp); /* <-- ADD THIS LINE */
+    font-family: var(--font-xp);
     font-size: 1.3rem;
 }
 
 
-/* --- 2. Welcome Title Styling --- */
 .welcome-title {
-    /* Layout */
     display: flex;
     align-items: center;
     gap: 0.5rem;
     
-    /* Font */
     font-family: var(--font-xp);
     font-size: 3.5rem;
-    font-weight: 100; /* This light weight is key */
+    font-weight: 100; 
     color: #fff;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
     margin: 0 0 1rem 0;
 }
 .xp-logo {
-    width: 100px; /* Adjust size as needed */
+    width: 100px;
     height: 75px;
 }
 
 
-/* --- 3. Taskbar & Button Styling --- */
 .taskbar-area {
-    /* ... (existing styles) ... */
-    /* Add padding and alignment */
     display: flex;
     align-items: center;
     padding-left: 2rem;
 }
 
 #turn-off-button {
-    /* UN-HIDE THE BUTTON */
-    display: flex; /* Use flex to align icon and text */
+    display: flex;
     align-items: center;
     gap: 0.5rem;
     
-    /* Font */
     font-family: var(--font-xp);
     font-size: 1.1rem;
     color: #fff;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
     
-    /* Button Style */
     background: none;
     border: none;
     padding: 0.5rem;
     border-radius: 4px;
     cursor: pointer;
     
-    /* Transparent border for the focus/hover effect */
     border: 2px solid transparent; 
 }
 
 .power-icon {
-    width: 32px; /* Adjust size as needed */
+    width: 32px; 
     height: 32px;
 }
 
-/* Hover/focus style for the turn off button */
 #turn-off-button:hover,
 #turn-off-button:focus {
     background: rgba(255, 255, 255, 0.2);
@@ -459,25 +396,24 @@ body.shut-down #shutdown-screen {
 /* ======== FOCAL POINT (TSP) STYLES ======== */
 
 .featured-exhibit {
-    /* Reuse the 8-bit border style from .whats-new */
     background-color: #222;
     border: 4px solid var(--color-border);
     box-shadow: inset 0 0 0 4px var(--color-border-inner),
                 0 0 0 4px var(--color-accent);
     
-    margin-bottom: 2rem; /* Space between this and "What's New" */
-    overflow: hidden; /* Keeps the canvas inside the border */
+    margin-bottom: 2rem; 
+    overflow: hidden; 
 }
 
 .canvas-container {
     width: 100%;
-    height: 300px; /* Fixed height for the animation area */
-    background-color: #000; /* Pure black for contrast */
-    border-bottom: 4px solid var(--color-border); /* Separator line */
+    height: 300px; 
+    background-color: #000; 
+    border-bottom: 4px solid var(--color-border); 
 }
 
 #tsp-canvas {
-    display: block; /* Removes annoying bottom whitespace */
+    display: block; 
     width: 100%;
     height: 100%;
 }
@@ -499,7 +435,6 @@ body.shut-down #shutdown-screen {
 
 /* ======== TROPHY CASE STYLES ======== */
 
-/* --- 1. Player Card --- */
 .ra-player-card {
     display: flex;
     align-items: center;
@@ -508,7 +443,6 @@ body.shut-down #shutdown-screen {
     padding: 2rem;
     margin-bottom: 2rem;
     
-    /* Reuse our 8-bit border style */
     border: 4px solid var(--color-border);
     box-shadow: inset 0 0 0 4px var(--color-border-inner),
                 0 0 0 4px var(--color-accent);
@@ -518,7 +452,7 @@ body.shut-down #shutdown-screen {
     width: 100px;
     height: 100px;
     border: 4px solid #fff;
-    box-shadow: 4px 4px 0 #000; /* Hard retro shadow */
+    box-shadow: 4px 4px 0 #000; 
 }
 
 .player-info h2 {
@@ -552,10 +486,8 @@ body.shut-down #shutdown-screen {
     color: #fff;
 }
 
-/* --- 2. Mastery Wall (The Grid) --- */
 .game-grid {
     display: grid;
-    /* Auto-fit creates as many columns as fit */
     grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
     gap: 1rem;
     margin-top: 1.5rem;
@@ -568,16 +500,14 @@ body.shut-down #shutdown-screen {
 }
 
 .game-item img {
-    width: 100%; /* Fill the grid cell */
+    width: 100%; 
     height: auto;
     display: block;
     
-    /* Retro pixel rendering for images */
     image-rendering: pixelated; 
     border: 2px solid #333;
 }
 
-/* Hover effect for game icons */
 .game-item:hover {
     transform: translateY(-4px);
     z-index: 10;
@@ -588,7 +518,6 @@ body.shut-down #shutdown-screen {
     box-shadow: 0 0 10px var(--color-accent);
 }
 
-/* Sort Control Styling */
 .trophy-controls {
     margin-bottom: 1.5rem;
     display: flex;
@@ -608,7 +537,7 @@ body.shut-down #shutdown-screen {
     color: #fff;
     border: 2px solid var(--color-border);
     padding: 0.5rem;
-    font-family: var(--font-body); /* Or var(--font-pixel) for extra retro */
+    font-family: var(--font-body); 
     cursor: pointer;
     outline: none;
 }
