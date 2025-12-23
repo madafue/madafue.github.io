@@ -153,6 +153,7 @@
                     <button class="mc-tab" onclick="openTool('stacks')">Stack Calc</button>
                     <button class="mc-tab" onclick="openTool('uuid')">UUID/Skin</button>
                     <button class="mc-tab" onclick="openTool('distance')">Distance</button>
+                    <button class="mc-tab" onclick="openTool('ticks')">Time Calc</button>
                 </div>
 
                 <div id="coords" class="tool-section active">
@@ -253,6 +254,37 @@
                     <button class="mc-btn-action" onclick="calcDistance()">Measure Distance</button>
 
                     <div id="distResult" class="mc-result" style="white-space: pre-line;">...</div>
+                </div>
+
+                <div id="ticks" class="tool-section">
+                    <h2>Time Calculation</h2>
+                    <p>Convert Game Ticks to Real Time.</p>
+
+                    <h3 style="color:#aaa;">Ticks -> Time</h3>
+                    <div style="display:flex; gap:10px; align-items:flex-end;">
+                        <div class="mc-input-group" style="flex-grow:1;">
+                            <label>Game Ticks</label>
+                            <input type="number" id="tickInput" class="mc-input" placeholder="e.g. 12000">
+                        </div>
+                        <button class="mc-btn-action" onclick="calcTicksToTime()" style="margin-bottom:1rem;">Convert</button>
+                    </div>
+                    <div id="tickResult" class="mc-result">...</div>
+
+                    <hr style="border-color:#555; margin:20px 0;">
+
+                    <h3 style="color:#aaa;">Time -> Ticks</h3>
+                    <div style="display:flex; gap:10px;">
+                        <div class="mc-input-group">
+                            <label>Minutes</label>
+                            <input type="number" id="minInput" class="mc-input" placeholder="0">
+                        </div>
+                        <div class="mc-input-group">
+                            <label>Seconds</label>
+                            <input type="number" id="secInput" class="mc-input" placeholder="0">
+                        </div>
+                    </div>
+                    <button class="mc-btn-action" onclick="calcTimeToTicks()">Calculate Ticks</button>
+                    <div id="timeResult" class="mc-result">...</div>
                 </div>
 
             </div>
@@ -379,6 +411,33 @@
                 Flat (Walking): <span style="color:#005288">${dist2d.toFixed(1)} blocks</span>
             `;
         }
+
+        // --- TOOL 5: TICKS ---
+        function calcTicksToTime() {
+            const ticks = parseInt(document.getElementById('tickInput').value) || 0;
+            
+            // 20 ticks = 1 second
+            const totalSeconds = ticks / 20;
+            
+            // Format nicely
+            const min = Math.floor(totalSeconds / 60);
+            const sec = (totalSeconds % 60).toFixed(1); // Keep 1 decimal for redstone precision
+            
+            document.getElementById('tickResult').innerHTML = 
+                `<span style="color:#005288">${totalSeconds} seconds</span> (${min}m ${sec}s)`;
+        }
+
+        function calcTimeToTicks() {
+            const m = parseInt(document.getElementById('minInput').value) || 0;
+            const s = parseInt(document.getElementById('secInput').value) || 0;
+            
+            const totalSeconds = (m * 60) + s;
+            const ticks = totalSeconds * 20;
+            
+            document.getElementById('timeResult').innerHTML = 
+                `<span style="color:#005288">${ticks.toLocaleString()} ticks</span>`;
+        }
+
     </script>
 </body>
 </html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Suite | Tools</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        /* ======== IMAGE SUITE STYLES ======== */
+        .converter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .panel {
+            flex: 1;
+            min-width: 300px;
+            background: #222;
+            border: 4px solid var(--color-border);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .drop-zone {
+            border: 4px dashed #555;
+            background: #1a1a1a;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            color: #aaa;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .drop-zone:hover, .drop-zone.dragover {
+            border-color: var(--color-accent);
+            color: #fff;
+            background: #252525;
+        }
+
+        .drop-zone p { margin: 0; }
+
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        select, button {
+            padding: 10px;
+            font-family: var(--font-pixel);
+            background: #000;
+            color: #fff;
+            border: 2px solid #555;
+            cursor: pointer;
+        }
+        
+        button.primary {
+            background: var(--color-accent);
+            color: #000;
+            border-color: #fff;
+            grid-column: span 2;
+        }
+
+        #previewImg {
+            max-width: 100%;
+            max-height: 300px;
+            border: 2px solid #fff;
+            background-image: 
+                linear-gradient(45deg, #333 25%, transparent 25%), 
+                linear-gradient(-45deg, #333 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #333 75%), 
+                linear-gradient(-45deg, transparent 75%, #333 75%);
+            background-size: 20px 20px;
+            background-color: #444;
+            display: none;
+            margin: 0 auto;
+        }
+
+        .file-info {
+            font-size: 0.8rem;
+            color: #888;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="site-wrapper">
+        <header class="site-header"><h1>Image Suite</h1></header>
+
+        <nav class="site-nav">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/trophy-case/">Trophy Case</a></li>
+                <li><a href="/tools/" class="current">Tools</a></li>
+                <li><a href="/library/">Library</a></li>
+            </ul>
+        </nav>
+
+        <main class="site-content">
+            <p>Client-side converter. Images are processed locally and never uploaded to a server.</p>
+
+            <div class="converter-container">
+                
+                <div class="panel">
+                    <h2>1. Select Image</h2>
+                    
+                    <div id="dropZone" class="drop-zone" onclick="document.getElementById('fileInput').click()">
+                        <span style="font-size: 2rem;">📂</span>
+                        <p>Click or Drop WebP here</p>
+                        <input type="file" id="fileInput" accept="image/webp, image/*" style="display:none">
+                    </div>
+
+                    <div class="controls">
+                        <label style="color:#aaa; display:flex; align-items:center;">Format:</label>
+                        <select id="formatSelect">
+                            <option value="image/png">PNG</option>
+                            <option value="image/jpeg">JPG</option>
+                        </select>
+                        
+                        <button class="primary" onclick="convertImage()">Convert & Download</button>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h2>2. Preview</h2>
+                    <div style="flex-grow: 1; display:flex; align-items:center; justify-content:center;">
+                        <img id="previewImg" alt="Preview">
+                        <p id="placeholderText" style="color:#555;">No image loaded...</p>
+                    </div>
+                    <div id="fileStats" class="file-info"></div>
+                    <a id="downloadLink" style="display:none;"></a>
+                </div>
+
+            </div>
+            
+            <canvas id="processCanvas" style="display:none;"></canvas>
+
+        </main>
+        
+        <footer class="site-footer">
+            <p><a href="/tools/">< Back to Tools</a></p>
+        </footer>
+    </div> 
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const previewImg = document.getElementById('previewImg');
+        const placeholder = document.getElementById('placeholderText');
+        const canvas = document.getElementById('processCanvas');
+        const ctx = canvas.getContext('2d');
+        const fileStats = document.getElementById('fileStats');
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (fileInput.files.length) handleFile(fileInput.files[0]);
+        });
+
+        let currentImg = new Image();
+
+        function handleFile(file) {
+            fileStats.innerText = `Original: ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                currentImg.onload = () => {
+                    previewImg.src = currentImg.src;
+                    previewImg.style.display = 'block';
+                    placeholder.style.display = 'none';
+                };
+                currentImg.src = e.target.result; 
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function convertImage() {
+            if (!currentImg.src) {
+                alert("Please upload an image first!");
+                return;
+            }
+
+            canvas.width = currentImg.width;
+            canvas.height = currentImg.height;
+
+            ctx.drawImage(currentImg, 0, 0);
+
+            const format = document.getElementById('formatSelect').value;
+            const newDataUrl = canvas.toDataURL(format, 0.9);
+            const link = document.getElementById('downloadLink');
+            link.href = newDataUrl;
+            
+            const ext = format === 'image/jpeg' ? 'jpg' : 'png';
+            link.download = `converted-image.${ext}`;
+            
+            link.click();
+        }
+    </script>
+</body>
+</html>
