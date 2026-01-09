@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Library | Madafue</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+    <div id="site-wrapper">
+    
+        <header class="site-header">
+            <h1>The Archive</h1>
+        </header>
+
+        <nav class="site-nav">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/trophy-case/">Trophy Case</a></li>
+                <li><a href="/tools/">Tools</a></li>
+                <li><a href="/library/" class="current">Library</a></li>
+            </ul>
+        </nav>
+
+        <main class="site-content">
+            
+            <div class="library-controls">
+                <span>Filter:</span>
+                <button class="filter-btn active" onclick="filterPosts('all')">All</button>
+                <button class="filter-btn" onclick="filterPosts('tech')">Tech & Code</button>
+                <button class="filter-btn" onclick="filterPosts('uni')">University</button>
+                <button class="filter-btn" onclick="filterPosts('personal')">Personal</button>
+            </div>
+
+            <div class="library-list">
+                
+                <a href="mario-tsp.html" class="lib-entry" data-category="tech">
+                    <div class="entry-date">2024-12-28</div>
+                    <div class="entry-info">
+                        <h3>Odyssey Optimization</h3>
+                        <p>Applying the Traveling Salesman Problem to Super Mario Odyssey speedrunning.</p>
+                        <span class="tag tag-tech">Tech</span>
+                    </div>
+                </a>
+
+                <a href="building-site.html" class="lib-entry" data-category="tech">
+                    <div class="entry-date">2025-01-05</div>
+                    <div class="entry-info">
+                        <h3>Bits to Beats</h3>
+                        <p>How I cracked the BDX format for modern DAWs.</p>
+                        <span class="tag tag-tech">Tech</span>
+                    </div>
+                </a>
+
+                <a href="#" class="lib-entry" data-category="uni">
+                    <div class="entry-date">2025-11-20</div>
+                    <div class="entry-info">
+                        <h3>Measuring the Invisible</h3>
+                        <p>Using Principal Component Analysis to Map Model Bias</p>
+                        <span class="tag tag-uni">Uni</span>
+                    </div>
+                </a>
+
+                <a href="my-post.html" class="lib-entry" data-category="tech personal">
+                    <div class="entry-date">2025-10-15</div>
+                    <div class="entry-info">
+                        <h3>Analog Pixels</h3>
+                        <p>Exploring the Legacy and Logic of SSTV Protocols</p>
+                        
+                        <div class="tag-container">
+                            <span class="tag tag-tech">Tech</span>
+                            <span class="tag tag-personal">Personal</span>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+
+        </main>
+
+        <footer class="site-footer">
+            <p>&copy; 2025 Adam Mawji. Written by humans.</p>
+        </footer>
+        
+    </div> 
+
+    <script>
+        function filterPosts(category) {
+            // 1. Update Buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // 2. Filter Entries
+            const entries = document.querySelectorAll('.lib-entry');
+            
+            entries.forEach(entry => {
+                // Get the tags string (e.g., "tech personal")
+                const tags = entry.dataset.category; 
+                
+                // Check if the selected category is INSIDE that string
+                if (category === 'all' || tags.includes(category)) {
+                    entry.style.display = 'flex';
+                } else {
+                    entry.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

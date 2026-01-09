@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Schedule Merger | Tools</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        /* ======== SCHEDULE TOOL STYLES ======== */
+        .tool-container {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .panel {
+            background: #222;
+            border: 4px solid var(--color-border);
+            padding: 1.5rem;
+            flex: 1;
+            min-width: 350px;
+        }
+
+        /* UPLOAD & CALIBRATION AREA */
+        .calibration-area {
+            position: relative;
+            margin-top: 1rem;
+            border: 2px solid #555;
+            background: #000;
+            overflow: hidden;
+            max-height: 500px; /* Scrollable if image is long */
+            overflow-y: auto;
+            cursor: crosshair;
+        }
+
+        #calibCanvas {
+            display: block;
+            max-width: 100%;
+        }
+
+        /* INSTRUCTION BANNER */
+        .instruction-banner {
+            background: var(--color-accent);
+            color: #000;
+            padding: 0.5rem;
+            font-weight: bold;
+            text-align: center;
+            font-family: var(--font-pixel);
+            margin-bottom: 1rem;
+            display: none; /* Hidden until image loads */
+        }
+
+        /* PROFILE LIST */
+        .profile-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .profile-item {
+            background: #333;
+            padding: 0.5rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #aaa;
+        }
+
+        /* THE MASTER GRID */
+        .master-grid {
+            display: grid;
+            grid-template-columns: 50px repeat(5, 1fr); /* Time + 5 Days */
+            gap: 2px;
+            background: #111;
+            border: 2px solid #444;
+        }
+
+        .grid-header {
+            background: #222;
+            color: #aaa;
+            text-align: center;
+            padding: 5px;
+            font-size: 0.8rem;
+            font-family: var(--font-pixel);
+        }
+
+        .time-label {
+            background: #222;
+            color: #aaa;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid #333;
+        }
+
+        .grid-cell {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            min-height: 30px;
+            position: relative;
+            transition: background 0.2s;
+        }
+
+        /* Availability States */
+        .cell-free { background: #1a441a; } /* Dark Green */
+        .cell-busy { background: #441a1a; } /* Dark Red */
+        .cell-mixed { background: #44441a; } /* Dark Yellow */
+
+        /* Hover Tooltip */
+        .cell-tooltip {
+            display: none;
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000;
+            border: 1px solid #fff;
+            padding: 5px;
+            z-index: 10;
+            white-space: nowrap;
+            font-size: 0.8rem;
+        }
+        .grid-cell:hover .cell-tooltip { display: block; }
+
+    </style>
+</head>
+<body>
+
+    <div id="site-wrapper">
+        <header class="site-header"><h1>Schedule Merger</h1></header>
+
+        <nav class="site-nav">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/trophy-case/">Trophy Case</a></li>
+                <li><a href="/tools/" class="current">Tools</a></li>
+                <li><a href="/library/">Library</a></li>
+            </ul>
+        </nav>
+
+        <main class="site-content">
+            <p>Upload screenshots of UofT Acorn schedules to find free time together.</p>
+
+            <div class="tool-container">
+                
+                <div class="panel">
+                    <h2>1. Add Person</h2>
+                    
+                    <div style="margin-bottom:1rem;">
+                        <label style="color:#aaa;">Name:</label>
+                        <input type="text" id="personName" class="mc-input" placeholder="e.g. Adam" style="padding:5px;">
+                    </div>
+
+                    <input type="file" id="fileInput" accept="image/*" style="margin-bottom:1rem;">
+
+                    <div id="instructionBanner" class="instruction-banner">
+                        Step 1: Click TOP-LEFT of the schedule grid (Mon 9am corner)
+                    </div>
+
+                    <div class="calibration-area">
+                        <canvas id="calibCanvas"></canvas>
+                    </div>
+
+                    <button id="addProfileBtn" class="mc-btn-action" style="display:none; width:100%; margin-top:1rem;" onclick="finalizeProfile()">
+                        Confirm & Add Schedule
+                    </button>
+
+                    <hr style="border-color:#444; margin:1.5rem 0;">
+
+                    <h3>Loaded Profiles</h3>
+                    <div id="profileList" class="profile-list">
+                        <div style="color:#666; font-style:italic;">No profiles yet...</div>
+                    </div>
+                    
+                    <button class="mc-btn-action" onclick="generateMasterSchedule()">Merge Schedules</button>
+                </div>
+
+                <div class="panel">
+                    <h2>2. Combined View</h2>
+                    <div id="masterGrid" class="master-grid">
+                        </div>
+                    <div style="margin-top:10px; display:flex; gap:15px; font-size:0.8rem;">
+                        <span style="display:flex; align-items:center; gap:5px;"><div style="width:15px; height:15px; background:#1a441a; border:1px solid #555;"></div> Free</span>
+                        <span style="display:flex; align-items:center; gap:5px;"><div style="width:15px; height:15px; background:#441a1a; border:1px solid #555;"></div> Busy</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+        
+        <footer class="site-footer">
+            <p><a href="/tools/">< Back to Tools</a></p>
+        </footer>
+    </div> 
+
+    <script>
+        // --- CONFIG ---
+        const COLS = 5;
+        const ROWS = 13; // 9am to 10pm usually covers everything
+
+        // --- STATE ---
+        let currentImg = new Image();
+        let profiles = []; 
+        let clickPoints = []; // [ {x,y}, {x,y} ]
+        
+        // Dragging State
+        let isDragging = false;
+        let dragIndex = -1; // 0 for Top-Left, 1 for Bottom-Right
+        
+        // --- DOM ---
+        const fileInput = document.getElementById('fileInput');
+        const canvas = document.getElementById('calibCanvas');
+        const ctx = canvas.getContext('2d');
+        const banner = document.getElementById('instructionBanner');
+        const addBtn = document.getElementById('addProfileBtn');
+        const personInput = document.getElementById('personName');
+
+        // --- 1. IMAGE UPLOAD ---
+        fileInput.addEventListener('change', (e) => {
+            if(!e.target.files.length) return;
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (evt) => {
+                currentImg = new Image();
+                currentImg.onload = () => {
+                    // Reset State
+                    clickPoints = [];
+                    isDragging = false;
+                    dragIndex = -1;
+                    
+                    banner.style.display = 'block';
+                    banner.innerText = "Step 1: Click TOP-LEFT corner (Start of Mon 9am)";
+                    banner.style.background = "var(--color-accent)";
+                    banner.style.color = "#000";
+                    addBtn.style.display = 'none';
+                    
+                    // Resize canvas
+                    canvas.width = currentImg.width;
+                    canvas.height = currentImg.height;
+                    redraw();
+                };
+                currentImg.src = evt.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // --- 2. INTERACTION LOGIC (Click & Drag) ---
+        
+        // Helper: Get Mouse Position relative to Canvas
+        function getPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            return {
+                x: (e.clientX - rect.left) * scaleX,
+                y: (e.clientY - rect.top) * scaleY
+            };
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            const pos = getPos(e);
+
+            // CASE A: Already have 2 points? Check for drag.
+            if (clickPoints.length === 2) {
+                // Check distance to Point 0 (Top Left)
+                if (dist(pos, clickPoints[0]) < 20) {
+                    isDragging = true;
+                    dragIndex = 0;
+                    return;
+                }
+                // Check distance to Point 1 (Bottom Right)
+                if (dist(pos, clickPoints[1]) < 20) {
+                    isDragging = true;
+                    dragIndex = 1;
+                    return;
+                }
+            }
+
+            // CASE B: Placing initial points
+            if (clickPoints.length < 2) {
+                clickPoints.push(pos);
+                redraw();
+                updateInstructions();
+            }
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            const pos = getPos(e);
+
+            // Handle Dragging
+            if (isDragging && dragIndex !== -1) {
+                clickPoints[dragIndex] = pos;
+                redraw();
+                return;
+            }
+
+            // Handle Cursor Hover UI
+            if (clickPoints.length === 2) {
+                const nearP0 = dist(pos, clickPoints[0]) < 20;
+                const nearP1 = dist(pos, clickPoints[1]) < 20;
+                canvas.style.cursor = (nearP0 || nearP1) ? 'move' : 'default';
+            } else {
+                canvas.style.cursor = 'crosshair';
+            }
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            isDragging = false;
+            dragIndex = -1;
+        });
+
+        function dist(p1, p2) {
+            return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+        }
+
+        function updateInstructions() {
+            if (clickPoints.length === 1) {
+                banner.innerText = "Step 2: Click BOTTOM-RIGHT corner (End of Fri)";
+            } else if (clickPoints.length === 2) {
+                banner.innerText = "Adjust points if needed, then click 'Confirm'";
+                banner.style.background = "#333";
+                banner.style.color = "#fff";
+                addBtn.style.display = 'block';
+            }
+        }
+
+        // --- 3. DRAWING LOOP ---
+        function redraw() {
+            // 1. Clear & Draw Image
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (currentImg.src) ctx.drawImage(currentImg, 0, 0);
+
+            // 2. Draw Points (Handles)
+            clickPoints.forEach((p, i) => {
+                ctx.fillStyle = "#00ff7f";
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 8, 0, Math.PI * 2); // Visible Handle
+                ctx.fill();
+                
+                ctx.strokeStyle = "#000";
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Label them
+                ctx.fillStyle = "#fff";
+                ctx.font = "bold 16px monospace";
+                ctx.fillText(i === 0 ? "TL" : "BR", p.x + 12, p.y + 5);
+            });
+
+            // 3. Draw Grid Preview (If we have both points)
+            if (clickPoints.length === 2) {
+                drawGridLines(clickPoints[0], clickPoints[1]);
+            }
+        }
+
+        function drawGridLines(p1, p2) {
+            const width = p2.x - p1.x;
+            const height = p2.y - p1.y;
+            const cellW = width / COLS;
+            const cellH = height / ROWS;
+
+            ctx.strokeStyle = "rgba(0, 255, 127, 0.6)";
+            ctx.lineWidth = 2;
+
+            // Vertical Lines
+            for (let c = 0; c <= COLS; c++) {
+                ctx.beginPath();
+                ctx.moveTo(p1.x + (c * cellW), p1.y);
+                ctx.lineTo(p1.x + (c * cellW), p2.y);
+                ctx.stroke();
+            }
+            // Horizontal Lines
+            for (let r = 0; r <= ROWS; r++) {
+                ctx.beginPath();
+                ctx.moveTo(p1.x, p1.y + (r * cellH));
+                ctx.lineTo(p2.x, p1.y + (r * cellH));
+                ctx.stroke();
+            }
+        }
+
+        // --- 4. PIXEL SCANNING & PROFILE LOGIC ---
+        function finalizeProfile() {
+            const name = personInput.value || "Unknown";
+            
+            // Re-calc grid dimensions based on final point positions
+            const p1 = clickPoints[0];
+            const p2 = clickPoints[1];
+            const width = p2.x - p1.x;
+            const height = p2.y - p1.y;
+            const cellW = width / COLS;
+            const cellH = height / ROWS;
+
+            let scheduleData = [];
+
+            // Scan
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    const sampleX = Math.floor(p1.x + (c * cellW) + (cellW/2));
+                    const sampleY = Math.floor(p1.y + (r * cellH) + (cellH/2));
+
+                    // Safety Check (Don't scan outside image)
+                    if (sampleX < 0 || sampleY < 0 || sampleX >= canvas.width || sampleY >= canvas.height) {
+                        scheduleData.push(0); 
+                        continue;
+                    }
+
+                    const pixel = ctx.getImageData(sampleX, sampleY, 1, 1).data;
+                    const red = pixel[0];
+                    const green = pixel[1];
+                    const blue = pixel[2];
+
+                    // White/Grey detection threshold
+                    const isWhite = (red > 230 && green > 230 && blue > 230);
+                    scheduleData.push(isWhite ? 0 : 1);
+                }
+            }
+
+            profiles.push({ name: name, grid: scheduleData, color: getRandomColor() });
+            updateProfileList();
+            
+            // Reset UI
+            clickPoints = [];
+            redraw(); // Clears markers
+            banner.style.display = 'none';
+            addBtn.style.display = 'none';
+            fileInput.value = "";
+            personInput.value = "";
+            alert(`${name} added!`);
+        }
+
+        // --- 5. MERGE & DISPLAY ---
+        function updateProfileList() {
+            const list = document.getElementById('profileList');
+            list.innerHTML = "";
+            profiles.forEach((p, idx) => {
+                list.innerHTML += `
+                    <div class="profile-item" style="border-left-color:${p.color}">
+                        <span>${p.name}</span>
+                        <button onclick="deleteProfile(${idx})" style="background:none; border:none; color:#f55; cursor:pointer;">x</button>
+                    </div>
+                `;
+            });
+        }
+        
+        // Needed global scope for the HTML button onclick to see it
+        window.deleteProfile = function(idx) {
+            profiles.splice(idx, 1);
+            updateProfileList();
+            generateMasterSchedule(); // Auto-update map if profiles change
+        };
+
+        function generateMasterSchedule() {
+            const grid = document.getElementById('masterGrid');
+            grid.innerHTML = ""; 
+
+            grid.innerHTML += `<div class="grid-header">Time</div>`;
+            ['Mon','Tue','Wed','Thu','Fri'].forEach(d => {
+                grid.innerHTML += `<div class="grid-header">${d}</div>`;
+            });
+
+            for(let r=0; r<ROWS; r++) {
+                grid.innerHTML += `<div class="time-label">${9+r}:00</div>`;
+                for(let c=0; c<COLS; c++) {
+                    const cellIndex = (r * COLS) + c;
+                    
+                    let busyPeople = [];
+                    profiles.forEach(p => {
+                        if(p.grid[cellIndex] === 1) busyPeople.push(p.name);
+                    });
+
+                    let cssClass = "cell-free";
+                    let tooltip = "Free";
+                    
+                    if(busyPeople.length > 0) {
+                        if(busyPeople.length === profiles.length && profiles.length > 0) {
+                            cssClass = "cell-busy"; 
+                            tooltip = "Busy: Everyone";
+                        } else {
+                            cssClass = "cell-mixed";
+                            tooltip = "Busy: " + busyPeople.join(", ");
+                        }
+                    }
+
+                    grid.innerHTML += `
+                        <div class="grid-cell ${cssClass}">
+                            <div class="cell-tooltip">${tooltip}</div>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function getRandomColor() {
+            const colors = ['#00ff7f', '#ff0055', '#55aaff', '#ffaa00', '#aa55ff'];
+            return colors[profiles.length % colors.length];
+        }
+
+        // Init
+        generateMasterSchedule();
+
+    </script>
+</body>
+</html>

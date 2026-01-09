@@ -45,8 +45,6 @@
             background: #252525;
         }
 
-        .drop-zone p { margin: 0; }
-
         .controls {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -85,9 +83,15 @@
         }
 
         .file-info {
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             color: #888;
             text-align: center;
+            line-height: 1.4;
+        }
+
+        .detected-tag {
+            color: var(--color-accent);
+            font-weight: bold;
         }
     </style>
 </head>
@@ -106,7 +110,7 @@
         </nav>
 
         <main class="site-content">
-            <p>Client-side converter. Images are processed locally and never uploaded to a server.</p>
+            <p>Client-side converter. Detects format automatically and processes locally.</p>
 
             <div class="converter-container">
                 
@@ -115,15 +119,16 @@
                     
                     <div id="dropZone" class="drop-zone" onclick="document.getElementById('fileInput').click()">
                         <span style="font-size: 2rem;">📂</span>
-                        <p>Click or Drop WebP here</p>
-                        <input type="file" id="fileInput" accept="image/webp, image/*" style="display:none">
+                        <p>Drop any image here<br><span style="font-size:0.8em; color:#666;">(JPG, PNG, WebP, GIF)</span></p>
+                        <input type="file" id="fileInput" accept="image/*" style="display:none">
                     </div>
 
                     <div class="controls">
-                        <label style="color:#aaa; display:flex; align-items:center;">Format:</label>
+                        <label style="color:#aaa; display:flex; align-items:center;">Convert To:</label>
                         <select id="formatSelect">
-                            <option value="image/png">PNG</option>
-                            <option value="image/jpeg">JPG</option>
+                            <option value="image/png">PNG (Lossless)</option>
+                            <option value="image/jpeg">JPG (Compact)</option>
+                            <option value="image/webp">WebP (Modern)</option>
                         </select>
                         
                         <button class="primary" onclick="convertImage()">Convert & Download</button>
@@ -132,10 +137,11 @@
 
                 <div class="panel">
                     <h2>2. Preview</h2>
-                    <div style="flex-grow: 1; display:flex; align-items:center; justify-content:center;">
+                    <div style="flex-grow: 1; display:flex; align-items:center; justify-content:center; flex-direction:column;">
                         <img id="previewImg" alt="Preview">
                         <p id="placeholderText" style="color:#555;">No image loaded...</p>
                     </div>
+                    
                     <div id="fileStats" class="file-info"></div>
                     <a id="downloadLink" style="display:none;"></a>
                 </div>
@@ -160,6 +166,10 @@
         const ctx = canvas.getContext('2d');
         const fileStats = document.getElementById('fileStats');
 
+        // Store file name for smart renaming later
+        let originalFileName = "image";
+
+        // --- EVENTS ---
         dropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
             dropZone.classList.add('dragover');
@@ -179,8 +189,22 @@
 
         let currentImg = new Image();
 
+        // --- LOGIC ---
         function handleFile(file) {
-            fileStats.innerText = `Original: ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+            // Save name without extension (e.g., "my_photo.webp" -> "my_photo")
+            const nameParts = file.name.split('.');
+            if (nameParts.length > 1) nameParts.pop(); // remove extension
+            originalFileName = nameParts.join('.');
+
+            // Detect Format from MIME type (e.g. "image/png")
+            const detectedFormat = file.type.split('/')[1].toUpperCase();
+
+            // Update Stats UI
+            fileStats.innerHTML = `
+                Detected: <span class="detected-tag">${detectedFormat}</span><br>
+                File: ${file.name}<br>
+                Size: ${(file.size/1024).toFixed(1)} KB
+            `;
             
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -200,18 +224,30 @@
                 return;
             }
 
+            // 1. Generic Structure (Canvas Bitmap)
             canvas.width = currentImg.width;
             canvas.height = currentImg.height;
-
             ctx.drawImage(currentImg, 0, 0);
 
+            // 2. Output Conversion
             const format = document.getElementById('formatSelect').value;
+            // Use 0.9 quality for JPG/WebP
             const newDataUrl = canvas.toDataURL(format, 0.9);
+
+            // 3. Smart Download Link
             const link = document.getElementById('downloadLink');
             link.href = newDataUrl;
             
-            const ext = format === 'image/jpeg' ? 'jpg' : 'png';
-            link.download = `converted-image.${ext}`;
+            // Map MIME types to extensions
+            const extMap = {
+                'image/jpeg': 'jpg',
+                'image/png': 'png',
+                'image/webp': 'webp'
+            };
+            const ext = extMap[format] || 'png';
+            
+            // "my_photo" + ".jpg"
+            link.download = `${originalFileName}-converted.${ext}`;
             
             link.click();
         }

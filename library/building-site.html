@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reverse Engineering BDX | Madafue</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+    <div id="site-wrapper">
+    
+        <header class="site-header">
+            <h1>The Archive</h1>
+        </header>
+
+        <nav class="site-nav">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/trophy-case/">Trophy Case</a></li>
+                <li><a href="/tools/">Tools</a></li>
+                <li><a href="/library/" class="current">Library</a></li>
+            </ul>
+        </nav>
+
+        <main class="site-content">
+            
+            <article class="blog-post">
+                <header class="post-header">
+                    <h1>Reverse Engineering the BDX Format</h1>
+                    <div class="post-meta">
+                        <span class="date">January 9, 2026</span>
+                        <div class="tag-container">
+                            <span class="tag tag-tech">Tech</span>
+                            <span class="tag tag-personal">Music</span>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="post-body">
+                    <p class="intro">
+                        The BDX file format is an obscure binary container for musical data. To preserve these songs, I decided to reverse engineer the specification and write a converter to standard MIDI.
+                    </p>
+
+                    <h2>The Challenge</h2>
+                    <p>
+                        placeholder
+                    </p>
+
+                    <h2>Analyzing the Hex Dump</h2>
+                    <p>
+                        The first step was opening the file in a Hex Editor. I immediately noticed a pattern in the first few bytes.
+                    </p>
+                    
+                    <div style="background:#222; border:1px dashed #555; padding:2rem; text-align:center; color:#666; margin: 1rem 0;">
+                        [Image: Screenshot of Hex Editor View]
+                    </div>
+
+                    <p>
+                        placeholder (BBDX1234)
+                    </p>
+
+                    <h2>The Script</h2>
+                    <p>
+                        Once I mapped out the byte structure, I wrote a Python script to parse the data chunks.
+                    </p>
+
+                    <pre class="code-block"><code>def parse_bdx(file_path):
+    with open(file_path, 'rb') as f:
+        header = f.read(4)
+        print(f"Header: {header.hex()}")
+
+        # [proper logic here]</code></pre>
+
+                    <h2>The Result</h2>
+                    <p>
+                        link to the BDXTool
+                    </p>
+                </div>
+
+                <footer class="post-footer">
+                    <hr>
+                    <a href="/library/">&larr; Back to Library</a>
+                </footer>
+            </article>
+
+        </main>
+
+        <footer class="site-footer">
+            <p>&copy; 2026 Adam Mawji. Built with purpose.</p>
+        </footer>
+        
+    </div> 
+</body>
+</html>
