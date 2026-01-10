@@ -73,7 +73,6 @@ window.startTSP = function() {
 
         if (visited.length > 1) {
             ctx.beginPath();
-            // ctx.strokeStyle = '#E60012'; // Mario Red allegedly
             ctx.strokeStyle = '#00ff7f';
             ctx.lineWidth = 2;
             

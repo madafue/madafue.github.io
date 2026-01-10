@@ -6,7 +6,7 @@
     
     --color-bg: #1a1a1a;       /* background */
     --color-text: #e0e0e0;     /* text */
-    --color-accent: #00ff7f;   /* "terminal green" allegedly */
+    --color-accent: #00ff7f;   /* "terminal green" */
     --color-border: #555;
     --color-border-inner: #000;
 }
@@ -393,7 +393,7 @@ body.shut-down #shutdown-screen {
 }
 
 
-/* ======== FOCAL POINT (TSP) STYLES ======== */
+/* ======== TSP STYLES ======== */
 
 .featured-exhibit {
     background-color: #222;
@@ -604,7 +604,7 @@ body.shut-down #shutdown-screen {
     filter: grayscale(100%); 
 }
 
-/* ======== LIBRARY / ARCHIVES ======== */
+/* ======== LIBRARY ======== */
 
 /* Filter Bar */
 .library-controls {
@@ -670,11 +670,10 @@ body.shut-down #shutdown-screen {
 .entry-date {
     font-family: var(--font-pixel);
     color: #888;
-    min-width: 100px; /* Aligns all text nicely */
+    min-width: 100px; /* Aligns all text hopefully */
     padding-top: 0.2rem;
 }
 
-/* Text Content */
 .entry-info h3 {
     margin: 0 0 0.5rem 0;
     color: #fff;
@@ -709,12 +708,9 @@ body.shut-down #shutdown-screen {
     margin-bottom: 3rem; /* More space before article starts */
     padding-bottom: 2rem; /* Space inside before the border */
     
-    /* REQUIREMENT 3: Fancy separation line */
-    /* A thick, retro double border looks like a terminal divider */
     border-bottom: 4px double #555; 
 }
 
-/* REQUIREMENT 1: Box around the title */
 .post-header h1 {
     font-family: var(--font-pixel);
     font-size: 2.2rem; /* Slightly smaller to fit box better */
@@ -722,26 +718,22 @@ body.shut-down #shutdown-screen {
     text-shadow: 2px 2px 0px #000;
     margin: 0 0 1rem 0; /* Reset margin, add bottom space */
 
-    /* The Title Box Look */
     background-color: #222;
     border: 3px solid #444;
     padding: 1rem 1.5rem;
-    /* Makes the box look sunken into the screen */
     box-shadow: inset 0 0 15px #000; 
 }
 
 /* Container for the two separate meta boxes */
 .post-meta {
     display: flex;
-    gap: 1rem; /* REQUIREMENT 2: Separation space between the boxes */
-    justify-content: space-between; /* <--- Pushes items to far left and far right */
+    gap: 1rem; 
+    justify-content: space-between; 
     align-items: center;
     font-family: var(--font-pixel);
     font-size: 0.9rem;
-    /* Note: No background on this container anymore */
 }
 
-/* Common styles for the distinct separate boxes (Date and Tag) */
 .post-meta .date,
 .post-meta .tag {
     background-color: #222;
@@ -749,29 +741,22 @@ body.shut-down #shutdown-screen {
     padding: 0.75rem 1.25rem;
     display: inline-flex;
     align-items: center;
-    /* A subtler sunken effect for smaller boxes */
     box-shadow: inset 0 0 5px #000; 
 }
 
-/* Specific Date module styling */
 .post-meta .date {
     color: #bbb;
-    /* Optional: Let date box stretch to fill space */
-    /* flex-grow: 1; */ 
 }
 
-/* The calendar icon tweak */
 .post-meta .date::before {
     content: "📅";
     margin-right: 0.75rem;
     filter: grayscale(100%) brightness(1.2);
 }
 
-/* Ensure tag retains its specific colors but gets the box shape */
 .post-meta .tag {
-    /* Overrides the margin-left: auto from before */
     margin-left: 0; 
-    border-radius: 0; /* Ensure sharp corners for retro feel */
+    border-radius: 0;
 }
 
 /* ======== GLOBAL HEADER UPDATES ======== */
@@ -783,16 +768,12 @@ body.shut-down #shutdown-screen {
     text-transform: uppercase;
     letter-spacing: 2px;
     
-    /* 1. The Gradient Colors (Green to Blue) */
     background: linear-gradient(90deg, var(--color-accent) 0%, #4facfe 100%);
     
-    /* 2. Clip the background to the text shape */
     -webkit-background-clip: text;
     background-clip: text;
     
-    /* 3. Make the text itself transparent so gradient shows through */
     color: transparent;
     
-    /* 4. Drop Shadow (We use filter because text-shadow doesn't work well with transparent text) */
     filter: drop-shadow(4px 4px 0px #000);
 }

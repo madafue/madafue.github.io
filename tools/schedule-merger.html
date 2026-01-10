@@ -67,7 +67,7 @@
             border-left: 4px solid #aaa;
         }
 
-        /* THE MASTER GRID */
+        /* MASTER GRID */
         .master-grid {
             display: grid;
             grid-template-columns: 50px repeat(5, 1fr); /* Time + 5 Days */
@@ -103,7 +103,6 @@
             transition: background 0.2s;
         }
 
-        /* Availability States */
         .cell-free { background: #1a441a; } /* Dark Green */
         .cell-busy { background: #441a1a; } /* Dark Red */
         .cell-mixed { background: #44441a; } /* Dark Yellow */
@@ -218,7 +217,6 @@
         const addBtn = document.getElementById('addProfileBtn');
         const personInput = document.getElementById('personName');
 
-        // --- 1. IMAGE UPLOAD ---
         fileInput.addEventListener('change', (e) => {
             if(!e.target.files.length) return;
             const file = e.target.files[0];
@@ -246,10 +244,8 @@
             };
             reader.readAsDataURL(file);
         });
-
-        // --- 2. INTERACTION LOGIC (Click & Drag) ---
         
-        // Helper: Get Mouse Position relative to Canvas
+        // Helper - Get Mouse Position relative to Canvas
         function getPos(e) {
             const rect = canvas.getBoundingClientRect();
             const scaleX = canvas.width / rect.width;
@@ -263,15 +259,12 @@
         canvas.addEventListener('mousedown', (e) => {
             const pos = getPos(e);
 
-            // CASE A: Already have 2 points? Check for drag.
             if (clickPoints.length === 2) {
-                // Check distance to Point 0 (Top Left)
                 if (dist(pos, clickPoints[0]) < 20) {
                     isDragging = true;
                     dragIndex = 0;
                     return;
                 }
-                // Check distance to Point 1 (Bottom Right)
                 if (dist(pos, clickPoints[1]) < 20) {
                     isDragging = true;
                     dragIndex = 1;
@@ -279,7 +272,6 @@
                 }
             }
 
-            // CASE B: Placing initial points
             if (clickPoints.length < 2) {
                 clickPoints.push(pos);
                 redraw();
@@ -327,13 +319,10 @@
             }
         }
 
-        // --- 3. DRAWING LOOP ---
         function redraw() {
-            // 1. Clear & Draw Image
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             if (currentImg.src) ctx.drawImage(currentImg, 0, 0);
 
-            // 2. Draw Points (Handles)
             clickPoints.forEach((p, i) => {
                 ctx.fillStyle = "#00ff7f";
                 ctx.beginPath();
@@ -344,13 +333,11 @@
                 ctx.lineWidth = 2;
                 ctx.stroke();
 
-                // Label them
                 ctx.fillStyle = "#fff";
                 ctx.font = "bold 16px monospace";
                 ctx.fillText(i === 0 ? "TL" : "BR", p.x + 12, p.y + 5);
             });
 
-            // 3. Draw Grid Preview (If we have both points)
             if (clickPoints.length === 2) {
                 drawGridLines(clickPoints[0], clickPoints[1]);
             }
@@ -381,11 +368,9 @@
             }
         }
 
-        // --- 4. PIXEL SCANNING & PROFILE LOGIC ---
         function finalizeProfile() {
             const name = personInput.value || "Unknown";
             
-            // Re-calc grid dimensions based on final point positions
             const p1 = clickPoints[0];
             const p2 = clickPoints[1];
             const width = p2.x - p1.x;
@@ -431,7 +416,6 @@
             alert(`${name} added!`);
         }
 
-        // --- 5. MERGE & DISPLAY ---
         function updateProfileList() {
             const list = document.getElementById('profileList');
             list.innerHTML = "";
@@ -449,7 +433,7 @@
         window.deleteProfile = function(idx) {
             profiles.splice(idx, 1);
             updateProfileList();
-            generateMasterSchedule(); // Auto-update map if profiles change
+            generateMasterSchedule(); 
         };
 
         function generateMasterSchedule() {

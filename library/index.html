@@ -87,18 +87,14 @@
 
     <script>
         function filterPosts(category) {
-            // 1. Update Buttons
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
 
-            // 2. Filter Entries
             const entries = document.querySelectorAll('.lib-entry');
             
             entries.forEach(entry => {
-                // Get the tags string (e.g., "tech personal")
                 const tags = entry.dataset.category; 
                 
-                // Check if the selected category is INSIDE that string
                 if (category === 'all' || tags.includes(category)) {
                     entry.style.display = 'flex';
                 } else {

@@ -317,7 +317,7 @@
             document.getElementById('coordResult').innerText = `Overworld: X: ${ox} / Z: ${oz}`;
         }
 
-        // --- TOOL 2: STACKS ---
+        // STACKS
         function calcStacks() {
             const total = parseInt(document.getElementById('totalItems').value) || 0;
             const stackSize = parseInt(document.getElementById('stackSize').value);
@@ -345,7 +345,7 @@
             document.getElementById('stackResult').innerText = output;
         }
 
-        // --- TOOL 3: UUID & SKIN ---
+        // UUID & SKIN 
         async function lookupPlayer() {
             const username = document.getElementById('mcUsername').value.trim();
             if (!username) return;
@@ -384,7 +384,7 @@
             }
         }
 
-        // --- TOOL 4: DISTANCE ---
+        // DISTANCE 
         function calcDistance() {
             // default to 0 if empty
             const ax = parseFloat(document.getElementById('ax').value) || 0;
@@ -412,11 +412,11 @@
             `;
         }
 
-        // --- TOOL 5: TICKS ---
+        // TICKS
         function calcTicksToTime() {
             const ticks = parseInt(document.getElementById('tickInput').value) || 0;
             
-            // 20 ticks = 1 second
+            // 20 ticks per second
             const totalSeconds = ticks / 20;
             
             // Format nicely
