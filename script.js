@@ -60,6 +60,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    
-
+    // 1. Fade the page IN when it loads
+    // Intercept internal links to fade the page OUT before navigating
+    document.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            const target = link.getAttribute('href');
+            
+            // Check if it's an internal link
+            if (target && target.startsWith('/') && link.target !== '_blank') {
+                e.preventDefault(); // Stop the immediate jump
+                
+                // Trigger the fade-out CSS
+                document.body.classList.add('page-exiting');
+                
+                // Wait 200ms (matching our CSS transition), then go to the new page
+                setTimeout(() => {
+                    window.location.href = target;
+                }, 200); 
+            }
+        });
+    });
 });
+
+    

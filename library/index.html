@@ -1,25 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <style>
+        /* Force dark background instantly */
+        html { background-color: #1a1a1a; }
+        
+        /* Hide body instantly, then fade it in */
+        body { 
+            opacity: 0; 
+            animation: fastFadeIn 0.3s ease-in forwards; 
+        }
+        
+        @keyframes fastFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Library | Madafue</title>
+    <title>The Archive | Madafue's Atlas</title>
     <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
+
+    <div id="earthbound-bg"></div>
+    <div id="crt-overlay"></div>
 
     <div id="site-wrapper">
     
         <header class="site-header">
             <h1>The Archive</h1>
+            <p class="site-subheading">A categorized log of creation.</p>
         </header>
 
         <nav class="site-nav">
             <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/trophy-case/">Trophy Case</a></li>
-                <li><a href="/tools/">Tools</a></li>
-                <li><a href="/library/" class="current">Library</a></li>
+                <li><a href="/" class="nav-home">Home</a></li>
+                <li><a href="/trophy-case/" class="nav-trophy">Trophy Case</a></li>
+                <li><a href="/tools/" class="nav-tools">Tools</a></li>
+                <li><a href="/library/" class="nav-library current">Library</a></li>
             </ul>
         </nav>
 
@@ -80,7 +99,7 @@
         </main>
 
         <footer class="site-footer">
-            <p>&copy; 2025 Adam Mawji. Written by humans.</p>
+            <p>&copy; 2026 Adam Mawji. Written by humans.</p>
         </footer>
         
     </div> 
@@ -103,5 +122,8 @@
             });
         }
     </script>
+    
+    <script src="../bg.js"></script>
+    <script src="../crt.js"></script>
 </body>
 </html>

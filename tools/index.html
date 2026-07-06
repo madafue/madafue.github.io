@@ -1,25 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <style>
+        /* Force dark background instantly */
+        html { background-color: #1a1a1a; }
+        
+        /* Hide body instantly, then fade it in */
+        body { 
+            opacity: 0; 
+            animation: fastFadeIn 0.3s ease-in forwards; 
+        }
+        
+        @keyframes fastFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Control Panel | Madafue</title>
+    <title>Control Panel | Madafue's Atlas</title>
     <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
+
+    <div id="earthbound-bg"></div>
+    <div id="crt-overlay"></div>
 
     <div id="site-wrapper">
     
         <header class="site-header">
             <h1>Control Panel</h1>
+            <p class="site-subheading">Logic, trial, and error.</p>
         </header>
 
         <nav class="site-nav">
             <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/trophy-case/">Trophy Case</a></li>
-                <li><a href="/tools/" class="current">Tools</a></li>
-                <li><a href="/library/">Library</a></li>
+                <li><a href="/" class="nav-home">Home</a></li>
+                <li><a href="/trophy-case/" class="nav-trophy">Trophy Case</a></li>
+                <li><a href="/tools/" class="nav-tools current">Tools</a></li>
+                <li><a href="/library/" class="nav-library">Library</a></li>
             </ul>
         </nav>
 
@@ -88,16 +107,17 @@
                     </div>
                 </a>
 
-                
-
             </div>
 
         </main>
 
         <footer class="site-footer">
-            <p>&copy; 2025 Adam Mawji.</p>
+            <p>&copy; 2026 Adam Mawji. Assembled piece by piece.</p>
         </footer>
         
     </div> 
+    
+    <script src="../bg.js"></script>
+    <script src="../crt.js"></script>
 </body>
 </html>

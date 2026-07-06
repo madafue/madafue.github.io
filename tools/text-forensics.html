@@ -35,11 +35,17 @@
 
             <section class="forensics-container">
                 <textarea id="lab-input" class="text-input" placeholder="Paste essay or text here..."></textarea>
-                <button id="analyze-btn" class="analyze-btn">Run Analysis</button>
+                
+                <div id="highlight-box" class="highlight-box"></div>
+
+                <div style="display: flex; gap: 1rem;">
+                    <button id="analyze-btn" class="analyze-btn">Run Analysis</button>
+                    <button id="reset-btn" class="reset-btn">Edit Text</button>
+                </div>
                 
                 <div id="results-panel" class="results-panel">
                     <strong>System Output:</strong> <br>
-                    <span id="output-text">Awaiting input... (Ensure nli_model_production.json is in the same folder)</span>
+                    <span id="output-text">Awaiting input...</span>
                 </div>
             </section>
         </main>

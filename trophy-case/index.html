@@ -1,25 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <style>
+        /* Force dark background instantly */
+        html { background-color: #1a1a1a; }
+        
+        /* Hide body instantly, then fade it in */
+        body { 
+            opacity: 0; 
+            animation: fastFadeIn 0.3s ease-in forwards; 
+        }
+        
+        @keyframes fastFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trophy Case | Madafue</title>
+    <title>Trophy Case | Madafue's Atlas</title>
     <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
+
+    <div id="earthbound-bg"></div>
+
+    <div id="crt-overlay"></div>
 
     <div id="site-wrapper">
     
         <header class="site-header">
             <h1>The Trophy Case</h1>
+            <p class="site-subheading">Progress saved locally.</p>
         </header>
 
         <nav class="site-nav">
             <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/trophy-case/" class="current">Trophy Case</a></li>
-                <li><a href="/tools/">Tools</a></li>
-                <li><a href="/library/">Library</a></li>
+                <li><a href="/" class="nav-home">Home</a></li>
+                <li><a href="/trophy-case/" class="nav-trophy current">Trophy Case</a></li>
+                <li><a href="/tools/" class="nav-tools">Tools</a></li>
+                <li><a href="/library/" class="nav-library">Library</a></li>
             </ul>
         </nav>
 
@@ -46,7 +66,12 @@
                             <span class="value" id="ra-mastery-count">0</span>
                         </div>
                     </div>
-                    <p class="last-played">Last Seen: <span id="ra-last-game">...</span></p>
+                    <div id="ra-status-container" style="display: none;">
+                        <div class="status-box">
+                            <span class="status-label">Last Played: <span id="ra-last-game-title" style="color: #fff; font-weight: normal; margin-left: 4px;"></span></span>
+                            <span id="ra-last-game">Loading...</span>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -67,14 +92,30 @@
                     </div>
             </section>
 
+            <section class="beaten-section" style="margin-top: 3rem;">
+                <h2>Games Beaten</h2>
+                <p class="section-desc">Games I've rolled the credits on, but haven't fully mastered yet.</p>
+                <div id="ra-beaten-grid" class="game-grid">
+                    </div>
+            </section>
+
+            <section class="awards-section" style="margin-top: 3rem;">
+                <h2>Event Awards</h2>
+                <p class="section-desc">Badges earned from community events.</p>
+                <div id="ra-awards-grid" class="game-grid">
+                    </div>
+            </section>
+
         </main>
 
         <footer class="site-footer">
-            <p>&copy; 2025 Adam Mawji. Powered by RetroAchievements API.</p>
-            </footer>
+            <p>&copy; 2026 Adam Mawji. Powered by RetroAchievements API.</p>
+        </footer>
         
     </div> 
 
     <script src="trophy.js"></script>
+    <script src="../bg.js"></script>
+    <script src="../crt.js"></script>
 </body>
 </html>
